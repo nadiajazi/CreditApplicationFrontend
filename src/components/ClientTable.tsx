@@ -10,14 +10,19 @@ interface ClientTableProps {
 
 const ClientTable: React.FC<ClientTableProps> = () => {
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [selectedClientId, setSelectedClientId] = useState<number | null>(null);
   const clients = useClientStore ((state) => state.clients);
   console.log(clients);
   const filteredClients = clients.filter((client) =>
   client.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
   const [showPopup, setShowPopup] = useState(false);
-  const handleRowClick = () => {
+
+
+
+  const handleRowClick = (clientId: number) => {
     setShowPopup(true);
+    setSelectedClientId(clientId);
   };
 
   const handleClosePopup = () => {
@@ -26,6 +31,8 @@ const ClientTable: React.FC<ClientTableProps> = () => {
   
 
   const removeClient = useClientStore((state) => state.removeClient);
+  const updateClientTotalAmount = useClientStore((state) => state.updateClientTotalAmount);
+
     
   const handleDelete = (clientId: number) => {
       removeClient(clientId);
@@ -90,8 +97,10 @@ const ClientTable: React.FC<ClientTableProps> = () => {
         </thead>
         <tbody>
           {filteredClients.map((client) => (
+                
+                
                 <tr
-                onClick={handleRowClick}
+                onClick={() => handleRowClick(client.id)}
                 key={client.id}
                 className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-900"
                 >   
@@ -102,7 +111,17 @@ const ClientTable: React.FC<ClientTableProps> = () => {
                   {client.name}
                 </td>
                 <td className="px-6 py-4">{client.email}</td>
-                <td className="px-6 py-4">{client.totalAmount}</td>
+                <td className="px-6 py-4">
+                { showPopup && selectedClientId === client.id ? (
+                  <FormTransaction
+                    clientId={client.id}
+                    onClose={handleClosePopup}
+                    updateClientTotalAmount={updateClientTotalAmount}
+                  />
+                ) : (
+                  <>{client.totalAmount}</>
+                )}
+              </td>
                 <td className="px-6 py-4">
                 <button
                   className="text-red-500 hover:text-red-700 mr-2"
@@ -115,7 +134,7 @@ const ClientTable: React.FC<ClientTableProps> = () => {
           ))}
         </tbody>
       </table>
-      {showPopup && <FormTransaction onClose={handleClosePopup} />}
+  
     </div>
   );
 };

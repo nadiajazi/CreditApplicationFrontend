@@ -17,7 +17,8 @@ interface State {
 interface Actions {
     fetchData : () => Promise<void>
     removeClient: (clientId: number) => void;
-    
+    updateClientTotalAmount: (clientId: number, totalAmount: number) => void;
+
 }
 
 const INITIAL_STATE: State = {
@@ -50,6 +51,13 @@ export const useClientStore = create<State & Actions>((set) => ({
       return { ...state, clients: updatedClients };
     }),
   
+
+    updateClientTotalAmount: (clientId: number, newTotalAmount: number) =>
+    set((state) => ({
+      clients: state.clients.map((client) =>
+        client.id === clientId ? { ...client, totalAmount: newTotalAmount } : client
+      ),
+    })),
 
 
 }));
