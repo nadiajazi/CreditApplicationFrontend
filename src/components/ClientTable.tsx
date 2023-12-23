@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { FaTrash} from 'react-icons/fa';
 import {Client, useClientStore} from '../stores/useClientStore';
 import FormTransaction from "../components/FormTransaction"
+import { Link } from 'react-router-dom';
 
 interface ClientTableProps {
   clients: Client[];
@@ -16,22 +17,16 @@ const ClientTable: React.FC<ClientTableProps> = () => {
   const filteredClients = clients.filter((client) =>
   client.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
-  const [showPopup, setShowPopup] = useState(false);
-
-
 
   const handleRowClick = (clientId: number) => {
-    setShowPopup(true);
+
     setSelectedClientId(clientId);
   };
 
-  const handleClosePopup = () => {
-    setShowPopup(false);
-  };
+  
   
 
   const removeClient = useClientStore((state) => state.removeClient);
-  const updateClientTotalAmount = useClientStore((state) => state.updateClientTotalAmount);
 
     
   const handleDelete = (clientId: number) => {
@@ -75,9 +70,6 @@ const ClientTable: React.FC<ClientTableProps> = () => {
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
       <thead>
           <tr >
-            <th scope="col" className="px-16 py-3">
-              <span className="sr-only">Image</span>
-            </th>
             <th scope="col" className="px-6 py-3">
               Name
             </th>
@@ -96,49 +88,35 @@ const ClientTable: React.FC<ClientTableProps> = () => {
           </tr>
         </thead>
         <tbody>
-          {filteredClients.map((client) => (
-                
-                
+          {filteredClients.map((client) => (  
                 <tr
                 onClick={() => handleRowClick(client.id)}
                 key={client.id}
                 className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-900"
                 >   
-                <td className="p-4">
-                  <img src={client.image} className="w-16 md:w-32 max-w-full max-h-full" alt={client.name} />
-                </td>
                 <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                   {client.name}
                 </td>
                 <td className="px-6 py-4">{client.email}</td>
+                <td className="px-6 py-4">{client.address.city}</td>
+                <td className="px-6 py-4">{client.totalAmount.toFixed(3) } TND</td>
                 <td className="px-6 py-4">
-                { showPopup && selectedClientId === client.id ? (
-                  <FormTransaction
-                    clientId={client.id}
-                    onClose={handleClosePopup}
-                    updateClientTotalAmount={updateClientTotalAmount}
-                  />
-                ) : (
-                  <>{client.totalAmount}</>
-                )}
-              </td>
-                <td className="px-6 py-4">
-                <button
-                  className="text-red-500 hover:text-red-700 mr-2"
-                  onClick={() => handleDelete(client.id)}
-                >
-                  <FaTrash />
-                </button>
-              </td>
-            </tr>
-          ))}
+                    <Link to={`/admin/clients/form/${client.id}`}>
+                    <button>Modify</button>
+                    </Link>
+                    <button
+                      className="text-red-500 hover:text-red-700 mr-2"
+                      onClick={() => handleDelete(client.id)}
+                    >
+                    <FaTrash />
+                    </button>
+                </td>
+                </tr>
+              ))}
         </tbody>
       </table>
-  
     </div>
   );
 };
 
 export default ClientTable;
-
-

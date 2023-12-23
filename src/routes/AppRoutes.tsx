@@ -12,6 +12,7 @@ import AdminDashboard from '../admin/AdminDashboard';
 import AdminClientManagement from '../admin/AdminClientManagement';
 import ProductManagement from '../admin/ProductManagement';
 import AdminTransaction from '../admin/AdminTransaction';
+import FormTransaction from "../components/FormTransaction";
 
 const AppRoutes: React.FC = () => {
     return (
@@ -31,6 +32,10 @@ const AppRoutes: React.FC = () => {
         <Route path="/admin/clients" element={<AdminClientManagement />} />
         <Route path="/admin/transaction" element={<AdminTransaction />} /> 
         <Route path="/admin/products" element={<ProductManagement />} />
+        <Route
+          path="/admin/clients/form/:clientId"
+          element={<FormTransaction onClose={() => {}} clientId={0} updateClientTotalAmount={() => {}} />}
+        />        
         </Routes>
       </Router>
     );

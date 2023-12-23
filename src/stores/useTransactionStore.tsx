@@ -35,24 +35,34 @@ export const useTransactionStore = create<TransactionState & TransactionActions>
   totalPrice: INITIAL_STATE.totalPrice,
 
   addTransaction: async (transaction) => {
-    const price = await fetchPriceFromDatabase(transaction.title);
-   
-
-    set((state) => ({
-      transactions: [
-        ...state.transactions,
-        {
-          id: generateId(),
-          title: transaction.title,
-          quantity: transaction.quantity,
-          price: price,
-        },
-      ],
-      totalItems: state.totalItems + transaction.quantity,
-      totalPrice: state.totalPrice + transaction.price * transaction.quantity,
-    }));
+    try {
+      const price = await fetchPriceFromDatabase(transaction.title);
+      console.log("Fetched price from the database:", price);
+  
+      set((state) => {
+        console.log("Current state before update:", state);
+  
+        const newState = {
+          transactions: [
+            ...state.transactions,
+            {
+              id: generateId(),
+              title: transaction.title,
+              quantity: transaction.quantity,
+              price: price,
+            },
+          ],
+          totalItems: state.totalItems + transaction.quantity,
+          totalPrice: state.totalPrice + price * transaction.quantity,
+        };
+  
+        console.log("New state after update:", newState);
+        return newState;
+      });
+    } catch (error) {
+      console.error("Error adding transaction:", error);
+    }
   },
-
   removeTransaction: (id) => {
     set((state) => {
       const removedTransaction = state.transactions.find((transaction) => transaction.id === id);
@@ -69,5 +79,3 @@ export const useTransactionStore = create<TransactionState & TransactionActions>
     });
   },
 }));
-
-
