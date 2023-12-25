@@ -10,7 +10,6 @@ const LandingPage: React.FC = () => {
 
     navigate('/login');
 
-    navigate('client/dashboard');
 
   };
   return (

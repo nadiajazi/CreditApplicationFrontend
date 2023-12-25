@@ -2,8 +2,11 @@ import React from "react";
 import COVER_IMAGE from '../../assets/Idea_1.jpg'
 import Google from '../../assets/Google-removebg-preview.png'
 import { useNavigate } from 'react-router-dom';
+import {useState} from "react";
+import axios from "axios";
+import { ToastContainer, toast } from 'react-toastify';
 
-
+import 'react-toastify/dist/ReactToastify.css';
 
 
 export default function LoginPage()  {
@@ -12,11 +15,50 @@ export default function LoginPage()  {
 const handleGetSigninClick = () => {
   navigate('/signup');
 };
+const [informations, setInformations] = useState({
+  password: null,
+  email: null,
+}),
+[error, setError] = useState(null);
+const handleChange = (e:any, type:string) => {
+  setInformations((prev) => {
+    return { ...prev, [type]: e.target.value };
+  });
+};
+
+const redirectUser =()=>{
+   return setTimeout(() => {
+     window.location.pathname =('/Dashboard')
+   }, 5000);
+  
+ }
+const sendToServer = async()=>{
+  await axios.post("http://localhost:8080/api/v1/auth/authenticate",{
+    password:informations.password,
+    email:informations.email
+  }).then((res)=>{
+console.log(res.data)
+localStorage.setItem('accesToken',res.data.accessToken )
+localStorage.setItem('refreshToken',res.data.refreshToken )
+
+toast.success("succed")
+return redirectUser()
+  }).catch((err)=>{
+    console.log(err)
+toast.error("erreur ")
+   })
+}
+const handleClick=()=>{
+  sendToServer()
+
+}
 
   return (
 
     
     <div className="w-full h-screen flex items-start" > 
+            <ToastContainer />
+
     <div className="relative w-1/2 h-full flex flex-col" >
    
       <img src={COVER_IMAGE} className="w-full h-full object-cover" />
@@ -31,11 +73,15 @@ const handleGetSigninClick = () => {
       </div>
       <div className=" w-full flex flex-col">
         <input
+          value={informations.email?informations.email:""}
+          onChange={(e)=>handleChange(e,"email")}
          type="email" 
         placeholder="Email"
         className="w-full text-black py-2 my-2 bg-transparent border-b border-black outline-none focus:outline-none"
         />
           <input
+           value={informations.password?informations.password:""}
+           onChange={(e)=>handleChange(e,"password")}
          type="password" 
         placeholder="Password"
         className="w-full text-black py-4 my-2 bg-transparent border-b border-black outline-none focus:outline-none"
@@ -50,7 +96,10 @@ const handleGetSigninClick = () => {
       </div>
 
       <div className="w-full flex flex-col space-y-3 items-center mx-auto">
-  <button className="w-1/4 bg-[#036FE6] h-8 text-white font-semibold border-2 border-black rounded-md py my-2 text-center flex items-center justify-center">
+  <button 
+  onClick={handleClick}
+  
+  className="w-1/4 bg-[#036FE6] h-8 text-white font-semibold border-2 border-black rounded-md py my-2 text-center flex items-center justify-center">
     Login
   </button>
 
