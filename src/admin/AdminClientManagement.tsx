@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState, useEffect } from "react";
 import AdminSideBar from "../components/AdminSideBar";
 import ClientTable from "../components/ClientTable";
@@ -27,3 +28,19 @@ const AdminClientManagement: React.FC = () => {
 };
 
 export default AdminClientManagement;
+=======
+import React from 'react'
+
+function AdminClientManagement() {
+  return (
+    <div>
+      {/* UI Elements:
+        Table displaying a list of clients.
+        Details such as client name, email, montantmaximal and account status.
+        Ability to view client payment history. */}
+    </div>
+  )
+}
+
+export default AdminClientManagement
+>>>>>>> origin/MarwenChebbi

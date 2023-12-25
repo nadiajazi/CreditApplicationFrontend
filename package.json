@@ -3,6 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+<<<<<<< HEAD
+=======
+    "@fortawesome/react-fontawesome": "^0.2.0",
+    "@heroicons/react": "^2.0.18",
+    "@material-tailwind/react": "^2.1.4",
+    "@stitches/react": "^1.2.8",
+>>>>>>> origin/MarwenChebbi
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -14,11 +21,19 @@
     "postcss": "^8.4.31",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+<<<<<<< HEAD
     "react-icons": "^4.12.0",
     "react-scripts": "5.0.1",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4",
     "zustand": "^4.4.7"
+=======
+    "react-dropdown-select": "^4.10.0",
+    "react-scripts": "5.0.1",
+    "react-transition-group": "^4.4.5",
+    "typescript": "^4.9.5",
+    "web-vitals": "^2.1.4"
+>>>>>>> origin/MarwenChebbi
   },
   "scripts": {
     "start": "react-scripts start",
@@ -46,7 +61,11 @@
   },
   "devDependencies": {
     "@types/react-router-dom": "^5.3.3",
+<<<<<<< HEAD
     "@types/uuid": "^9.0.7",
+=======
+    "@types/react-transition-group": "^4.4.9",
+>>>>>>> origin/MarwenChebbi
     "react-router-dom": "^6.19.0",
     "tailwindcss": "^3.3.5"
   }

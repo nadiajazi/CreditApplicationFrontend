@@ -7,7 +7,11 @@ const LandingPage: React.FC = () => {
   const navigate = useNavigate();
 
   const handleGetStartedClick = () => {
+<<<<<<< HEAD
     navigate('/login');
+=======
+    navigate('client/dashboard');
+>>>>>>> origin/MarwenChebbi
   };
   return (
     <div className="flex flex-col md:flex-row justify-center items-center h-screen">
