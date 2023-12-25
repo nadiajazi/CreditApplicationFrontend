@@ -1,23 +1,6 @@
-<<<<<<< HEAD
-import React from 'react'
-
-export default function InvoicesPage() {
-  return (
-    <div>
-      {/* UI Elements:
-          Table displaying a list of invoices.
-          Details such as date, amount, and status. */}
-         
-    </div>
-  )
-}
-
-
-=======
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
 import { NavbarWithMegaMenu } from './Layout/NavList';
-import { FooterWithLogo } from './Layout/Footer';
+
 
 const InvoicesPage: React.FC = () => {
   const tableHeadings = [
@@ -53,7 +36,7 @@ const InvoicesPage: React.FC = () => {
       { text: 'paid', class: 'px-4 py-4 text-lg text-black- light:text-orange-300 whitespace-nowrap' },
       {text: 'foods', class:' px-4 py-4 text-lg text-black- light:text-orange-300 whitespace-nowrap'},
       { text: 'Download', class: 'px-4 py-4 text-lg text-blue-500 light:text-orange-300 whitespace-nowrap' },
-      // ... (similar entries for other columns)
+  
     ],
     [
       { text: '#4', class: 'px-4 py-4 text-lg font-medium text-blacklight:text-orange-200 whitespace-nowrap' },
@@ -61,7 +44,7 @@ const InvoicesPage: React.FC = () => {
       { text: 'active', class: 'px-4 py-4 text-lg text-black- light:text-orange-300 whitespace-nowrap' },
       {text: 'Beauty', class:' px-4 py-4 text-lg text-black- light:text-orange-300 whitespace-nowrap'},
       { text: 'Download', class: 'px-4 py-4 text-lg text-blue-500 light:text-orange-300 whitespace-nowrap' },
-      // ... (similar entries for other columns)
+   
     ],
     [
       { text: '#5', class: 'px-4 py-4 text-lg font-medium text-blacklight:text-orange-200 whitespace-nowrap' },
@@ -69,7 +52,7 @@ const InvoicesPage: React.FC = () => {
       { text: 'Cancelled', class: 'px-4 py-4 text-lg text-black- light:text-orange-300 whitespace-nowrap' },
       {text: 'foods', class:' px-4 py-4 text-lg text-black- light:text-orange-300 whitespace-nowrap'},
       { text: 'Download', class: 'px-4 py-4 text-lg text-blue-500 light:text-orange-300 whitespace-nowrap' },
-      // ... (similar entries for other columns)
+  
     ],
     [
       { text: '#6', class: 'px-4 py-4 text-lg font-medium text-blacklight:text-orange-200 whitespace-nowrap' },
@@ -85,7 +68,7 @@ const InvoicesPage: React.FC = () => {
       { text: 'paid', class: 'px-4 py-4 text-lg text-black- light:text-orange-300 whitespace-nowrap' },
       {text: 'foods', class:' px-4 py-4 text-lg text-black- light:text-orange-300 whitespace-nowrap'},
       { text: 'Download', class: 'px-4 py-4 text-lg text-blue-500 light:text-orange-300 whitespace-nowrap' },
-      // ... (similar entries for other columns)
+      
     ],
     [
       { text: '#8', class: 'px-4 py-4 text-lg font-medium text-blacklight:text-orange-200 whitespace-nowrap' },
@@ -93,15 +76,15 @@ const InvoicesPage: React.FC = () => {
       { text: 'active', class: 'px-4 py-4 text-lg text-black- light:text-orange-300 whitespace-nowrap' },
       {text: 'Beauty', class:' px-4 py-4 text-lg text-black- light:text-orange-300 whitespace-nowrap'},
       { text: 'Download', class: 'px-4 py-4 text-lg text-blue-500 light:text-orange-300 whitespace-nowrap' },
-      // ... (similar entries for other columns)
+      
     ],
-    // ... (similar entries for other rows)
+    
   ];
 
   const pagination = [
     { text: '1', class: 'px-2 py-1 text-lg text-orange-500 rounded-md light:bg-orange-800 bg-orange-100/60' },
     { text: '2', class: 'px-2 py-1 text-lg text-orange-500 rounded-md light:hover:bg-orange-800 light:text-orange-300 hover:bg-orange-100' },
-    // ... (similar entries for other pages)
+   
   ];
 
   return (
@@ -144,9 +127,8 @@ const InvoicesPage: React.FC = () => {
 
       {/* Pagination */}
       <div className="flex items-center justify-between mt-6">
-        <a href="#" className="flex items-center px-5 py-2 text-lg text-orange-700 capitalize transition-colors duration-200 bg-white border rounded-md gap-x-2 hover:bg-orange-100 light:bg-orange-900 light:text-orange-200 light:border-orange-700 light:hover:bg-orange-800">
           <span>previous</span>
-        </a>
+        
 
         <div className="items-center hidden md:flex gap-x-3">
           {/* Pagination Numbers */}
@@ -157,16 +139,15 @@ const InvoicesPage: React.FC = () => {
           ))}
         </div>
 
-        <a href="#" className="flex items-center px-5 py-2 text-lg text-orange-700 capitalize transition-colors duration-200 bg-white border rounded-md gap-x-2 hover:bg-orange-100 light:bg-orange-900 light:text-orange-200 light:border-orange-700 light:hover:bg-orange-800">
           <span>Next</span>
-        </a>
+        
       </div>
     </section>
-    <FooterWithLogo></FooterWithLogo>
+    
     </div>
     
   );
 };
 
 export default InvoicesPage;
->>>>>>> origin/MarwenChebbi
+

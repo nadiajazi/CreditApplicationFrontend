@@ -1,24 +1,5 @@
-<<<<<<< HEAD
-import React from 'react'
-
-function PaymentPage() {
-  return (
-    <div>
-        {/* UI Elements:
-          Form for making online payments.
-          Display of the client's current credit.
-          Confirmation message after successful payment. */}
-    </div>
-  )
-}
-
-export default PaymentPage
-=======
-// PaymentPage.jsx
-
 import React from 'react';
 import { NavbarWithMegaMenu } from './Layout/NavList';
-import { FooterWithLogo } from './Layout/Footer';
 
 const PaymentPage = () => {
   return (
@@ -67,11 +48,8 @@ const PaymentPage = () => {
         </button>
       </section>
       </div>
-
-      <FooterWithLogo></FooterWithLogo>
       </div>
   );
 };
 
 export default PaymentPage;
->>>>>>> origin/MarwenChebbi

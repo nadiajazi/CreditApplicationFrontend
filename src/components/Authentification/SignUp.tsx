@@ -15,7 +15,6 @@ export default function SignUp() {
   
 
   
-  {/*    pour le mot passe at le cas other dans la liste d'addrese*/ }
   const [selectedCity, setSelectedCity] = useState<string>("");
   const [customAddress, setCustomAddress] = useState<string>("");
   const [password, setPassword] = useState("");
@@ -39,7 +38,6 @@ export default function SignUp() {
   const handleCustomAddressChange = (event: ChangeEvent<HTMLInputElement>) => {
     setCustomAddress(event.target.value);
   };
-  {/* termine ici  */ }
 
   return (
     <div className="w-full h-screen flex items-start">

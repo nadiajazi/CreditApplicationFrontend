@@ -1,21 +1,5 @@
-<<<<<<< HEAD
-import React from 'react'
-
-function TransictionHistory() {
-  return (
-    <div>
-      {/* UI Elements:
-        Table displaying a list of transactions.
-        Details such as date, item purchased, and amount. */}
-    </div>
-  )
-}
-
-export default TransictionHistory
-=======
 import React from 'react';
 import { NavbarWithMegaMenu } from './Layout/NavList';
-import { FooterWithLogo } from './Layout/Footer';
 
 const transactions = [
   {
@@ -23,7 +7,7 @@ const transactions = [
     item: "foods",
     amount: "2570"
   },
-  // Add more transactions as needed
+ 
 ];
 
 const TransactionHistory = () => {
@@ -50,10 +34,8 @@ const TransactionHistory = () => {
         </tbody>
       </table>
     </div>
-    <FooterWithLogo></FooterWithLogo>
     </div>
   );
 };
 
 export default TransactionHistory;
->>>>>>> origin/MarwenChebbi

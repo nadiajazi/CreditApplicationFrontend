@@ -1,5 +1,3 @@
-// CreditAppPage.tsx
-
 import React, { useState } from 'react';
 
 const CreditAppPage: React.FC = () => {

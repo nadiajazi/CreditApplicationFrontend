@@ -2,8 +2,7 @@
 
 body {
   font-family: 'Inter', sans-serif;
-<<<<<<< HEAD
-=======
+
 }
 .fade-enter {
   opacity: 0.01;
@@ -21,5 +20,5 @@ body {
 .fade-exit-active {
   opacity: 0.01;
   transition: opacity 300ms ease-in;
->>>>>>> origin/MarwenChebbi
+
 }
