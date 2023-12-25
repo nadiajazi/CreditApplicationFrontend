@@ -1,26 +1,33 @@
 import React, { useState } from 'react';
 import { useTransactionStore, Transaction } from '../stores/useTransactionStore';
 import { useProductStore } from '../stores/useProductStore';
-import { Link } from 'react-router-dom';
-
+import { Link, useNavigate } from 'react-router-dom'; // Import withRouter
+import { useClientStore } from '../stores/useClientStore';
 interface TransactionProps {
   transactions?: Transaction[];
   onClose: () => void;
   clientId: number;
-  updateClientTotalAmount: (clientId: number, totalAmount: number) => void;
+  handleTransactionSubmit: ( totalTransactionAmount: number) => void;
 }
 
-const FormTransaction: React.FC<TransactionProps> = ({ onClose, clientId, updateClientTotalAmount }) => {
+
+const FormTransaction: React.FC<TransactionProps> = ({ onClose, clientId }) => {
   const [title, setTitle] = useState<string>("");
   const [quantity, setQuantity] = useState<number>(1);
   const transactions = useTransactionStore((state) => state.transactions);
   const addTransaction = useTransactionStore((state) => state.addTransaction);
   const removeTransaction = useTransactionStore((state) => state.removeTransaction);
-  const totalAmount = useTransactionStore((state) => state.totalPrice);
+  const navigate = useNavigate();
+
+
   const calculateTotalAmount = () => {
     return transactions.reduce((total, transaction) => {
       return total + transaction.price * transaction.quantity;
     }, 0);
+  };
+
+  const handleTransactionSubmit = (totalTransactionAmount: number) => {
+    useClientStore.getState().updateTotalAmount(clientId, totalTransactionAmount);
   };
 
   const fetchPriceFromDatabase = async (productTitle: string): Promise<number> => {
@@ -36,6 +43,14 @@ const FormTransaction: React.FC<TransactionProps> = ({ onClose, clientId, update
       return 0;
     }
   };
+  
+  const handleClose = () => {
+    const totalAmount = calculateTotalAmount();
+    handleTransactionSubmit(totalAmount);
+    navigate(`/admin/clients?clientId=${clientId}&totalAmount=${totalAmount}`);
+    onClose();
+  };
+
 
   return (
     <div className="max-w-md mx-auto p-4 bg-white shadow-md rounded-md">
@@ -65,15 +80,17 @@ const FormTransaction: React.FC<TransactionProps> = ({ onClose, clientId, update
         if (title.length && quantity > 0) {
         const price = await fetchPriceFromDatabase(title);
         if (price > 0) {
-          addTransaction({ title, quantity, price });
+          addTransaction({id: '',
+          title,
+          quantity,
+          price,
+          date: new Date(),});
           setTitle("");
           setQuantity(1);
-          updateClientTotalAmount(clientId, calculateTotalAmount());
+          handleTransactionSubmit(calculateTotalAmount()); 
         } else {
           console.error(`Product with title "${title}" not found in the database.`);
-          }
-          }
-                  }              }
+          }}}}
           >
               Add Item
           </button>
@@ -83,14 +100,16 @@ const FormTransaction: React.FC<TransactionProps> = ({ onClose, clientId, update
             <div>
               <span>{transaction.title}</span>
               <span className="ml-4">Quantity: {transaction.quantity}</span>
+              <span className="ml-4">Date: {transaction.date.toISOString()}</span>
+
             </div>
             <div>
               <span>Price: ${transaction.price}</span>
-              <button
+                <button
                 className="text-red-500 hover:text-red-700 ml-4"
                 onClick={() => {
                   removeTransaction(transaction.id);
-                  updateClientTotalAmount(clientId, calculateTotalAmount());
+                  handleTransactionSubmit( calculateTotalAmount());
                 }}
               >
                 Delete
@@ -100,11 +119,11 @@ const FormTransaction: React.FC<TransactionProps> = ({ onClose, clientId, update
         ))}
       </ul>
       <div className="mt-4">
-        <h4 className="text-xl font-semibold">Total Amount: ${totalAmount}</h4>
+        <h4 className="text-xl font-semibold">Total Amount: ${calculateTotalAmount()}</h4>
       </div>
       <div className="mt-6">
         <Link to={`/admin/clients`}>
-          <button className="bg-gray-300 text-gray-800 px-4 py-2 rounded-md" onClick={onClose}>
+          <button className="bg-gray-300 text-gray-800 px-4 py-2 rounded-md" onClick={handleClose}>
             Close
           </button>
         </Link>

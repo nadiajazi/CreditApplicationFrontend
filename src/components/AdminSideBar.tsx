@@ -24,7 +24,7 @@ const AdminSideBar: React.FC<AdminSideBarProps> = ({ open, toggleSidebar }) => {
     { name: "Dashboard", link: "/admin", icon: MdOutlineDashboard },
     { name: "Costumers", link: "/admin/clients", icon: AiOutlineUser },
     { name: "Products", link: "/admin/products", icon: RiShoppingBag3Fill },
-    { name: "Transaction", link: "/admin/transaction", icon: FiShoppingCart },
+    { name: "Transactions", link: "/admin/transaction", icon: FiShoppingCart },
     { name: "analytics", link: "/", icon: TbReportAnalytics, margin: true },
     { name: "Logout", link: "/login", icon: RiSettings4Line },
   ];

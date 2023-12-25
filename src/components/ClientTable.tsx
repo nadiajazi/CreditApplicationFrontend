@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FaTrash} from 'react-icons/fa';
+import { FaMoneyBillTransfer } from "react-icons/fa6";
 import {Client, useClientStore} from '../stores/useClientStore';
-import FormTransaction from "../components/FormTransaction"
 import { Link } from 'react-router-dom';
 
 interface ClientTableProps {
@@ -100,16 +100,19 @@ const ClientTable: React.FC<ClientTableProps> = () => {
                 <td className="px-6 py-4">{client.email}</td>
                 <td className="px-6 py-4">{client.address.city}</td>
                 <td className="px-6 py-4">{client.totalAmount.toFixed(3) } TND</td>
-                <td className="px-6 py-4">
-                    <Link to={`/admin/clients/form/${client.id}`}>
-                    <button>Modify</button>
-                    </Link>
-                    <button
-                      className="text-red-500 hover:text-red-700 mr-2"
-                      onClick={() => handleDelete(client.id)}
-                    >
-                    <FaTrash />
-                    </button>
+                <td className="px-6 py-4 flex-direction-row">
+                      <div className="flex items-center">
+                        <Link to={`/admin/clients/form/${client.id}`}>
+                        <FaMoneyBillTransfer style={{ fontSize: '1.5rem', marginRight: '4px' }} />
+                        </Link>
+
+                        <button
+                            className="text-red-500 hover:text-red-700 mr-2"
+                            onClick={() => handleDelete(client.id)}
+                        >
+                            <FaTrash />
+                    </button>                      
+                    </div>
                 </td>
                 </tr>
               ))}

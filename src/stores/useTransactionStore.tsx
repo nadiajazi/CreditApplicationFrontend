@@ -6,6 +6,7 @@ export interface Transaction {
   title: string;
   quantity: number;
   price: number;
+  date: Date
 }
 
 interface TransactionState {
@@ -15,7 +16,7 @@ interface TransactionState {
 }
 
 interface TransactionActions {
-  addTransaction: (transaction: { title: string; quantity: number; price: number }) => void;
+  addTransaction: (transaction: Transaction) => void;
   removeTransaction: (id: string) => void;
 }
 
@@ -26,7 +27,7 @@ const INITIAL_STATE: TransactionState = {
 };
 
 const generateId = (): string => {
-  return '_' + Math.random().toString(36);
+  return '_' + Math.random().toString(36).substr(2, 9);
 };
 
 export const useTransactionStore = create<TransactionState & TransactionActions>((set, get) => ({
@@ -50,6 +51,8 @@ export const useTransactionStore = create<TransactionState & TransactionActions>
               title: transaction.title,
               quantity: transaction.quantity,
               price: price,
+              date: transaction.date, 
+           
             },
           ],
           totalItems: state.totalItems + transaction.quantity,

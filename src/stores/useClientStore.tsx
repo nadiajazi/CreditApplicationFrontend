@@ -24,7 +24,7 @@ interface State {
 interface Actions {
   fetchData: () => Promise<void>;
   removeClient: (clientId: number) => void;
-  updateClientTotalAmount: (clientId: number, newTotalAmount: number) => void;
+  updateTotalAmount: (clientId: number, transactionAmount: number) => void;
 }
 
 const INITIAL_STATE: State = {
@@ -46,7 +46,7 @@ export const useClientStore = create<State & Actions>((set) => ({
 
       const clientsWithTotalAmount: Client[] = data.map((client: User) => ({
         ...client,
-        totalAmount: 0, // Set the initial total amount here
+        totalAmount: 0, 
       }));
 
       set({ clients: clientsWithTotalAmount, isLoading: false });
@@ -62,10 +62,12 @@ export const useClientStore = create<State & Actions>((set) => ({
       return { ...state, clients: updatedClients };
     }),
 
-  updateClientTotalAmount: (clientId: number, newTotalAmount: number) =>
+    updateTotalAmount: (clientId, transactionAmount) =>
     set((state) => ({
       clients: state.clients.map((client) =>
-        client.id === clientId ? { ...client, totalAmount: newTotalAmount } : client
+        client.id === clientId
+          ? { ...client, totalamount: client.totalAmount + transactionAmount }
+          : client
       ),
     })),
 }));
