@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LandingPage from '../landing/LandingPage';
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 import Dachboard from "../client/Dachboard";
 import InvoicesPage from '../client/InvoicesPage';
@@ -11,6 +12,11 @@ import TransictionHistory from "../client/TransictionHistory";
 // import LoginPage from '../components/Authentication/LoginPage';
 // import SignUpPage from '../components/Authentication/SignUpPage';
 // import EmailVerificationPage from '../auth/EmailVerificationPage';
+=======
+import LoginPage from "../components/Authentification/LoginPage";
+import SignUp from "../components/Authentification/SignUp";
+import EmailVerificationPage from '../components/Authentification/EmailVerification';
+>>>>>>> origin/mahmoud
 // import Dashboard from '../client/Dashboard';
 // import TransactionHistory from '../client/TransactionHistory';
 // import PaymentPage from '../client/PaymentPage';
@@ -33,6 +39,7 @@ const AppRoutes: React.FC = () => {
         <Routes>
         <Route path="/" element={<LandingPage />} />
 <<<<<<< HEAD
+<<<<<<< HEAD
         <Route path="/admin" element={<AdminDashboard />} />
 =======
         <Route path="/client/dashboard" element={<Dachboard />} />
@@ -43,8 +50,12 @@ const AppRoutes: React.FC = () => {
 >>>>>>> origin/MarwenChebbi
         {/* <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignUpPage />} />
+=======
+       <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignUp/>} />
+>>>>>>> origin/mahmoud
         <Route path="/verify-email" element={<EmailVerificationPage />} />
-        <Route path="/client" element={<Dashboard />} />
+        {/*<Route path="/client" element={<Dashboard />} />
         <Route path="/client/transactions" element={<TransactionHistory />} />
         <Route path="/client/payment" element={<PaymentPage />} />
         <Route path="/client/invoices" element={<InvoicesPage />} />
