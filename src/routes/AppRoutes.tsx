@@ -1,0 +1,46 @@
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import LandingPage from '../landing/LandingPage';
+
+import Dachboard from "../client/Dachboard";
+import InvoicesPage from '../client/InvoicesPage';
+import PaymentPage from "../client/PaymentPage";
+import TransictionHistory from "../client/TransictionHistory";
+import LoginPage from "../components/Authentification/LoginPage";
+import SignUp from "../components/Authentification/SignUp";
+import EmailVerification from '../components/Authentification/EmailVerification';
+import AdminDashboard from '../admin/AdminDashboard';
+import AdminClientManagement from '../admin/AdminClientManagement';
+import ProductManagement from '../admin/ProductManagement';
+import AdminTransaction from '../admin/AdminTransaction';
+import FormTransaction from "../components/FormTransaction";
+
+
+
+const AppRoutes: React.FC = () => {
+    return (
+      <Router>
+        <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<LoginPage  />} />
+        <Route path="/emailVerification" element={<EmailVerification  />} />
+        <Route path="/signUp" element={<SignUp />} />
+        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/client/dashboard" element={<Dachboard />} />
+        <Route path="/client/dashboard/invoices" element={<InvoicesPage />} />
+        <Route path="/client/dashboard/payment" element={<PaymentPage />} />
+        <Route path="/client/dashboard/history" element={<TransictionHistory />} />
+
+        <Route path="/admin/clients" element={<AdminClientManagement />} />
+        <Route path="/admin/transaction" element={<AdminTransaction />} /> 
+        <Route path="/admin/products" element={<ProductManagement />} />
+        <Route
+          path="/admin/clients/form/:clientId"
+          element={<FormTransaction onClose={() => {}} clientId={0} handleTransactionSubmit={() => {}} />}
+        />        
+        </Routes>
+      </Router>
+    );
+  };
+  
+  export default AppRoutes;
