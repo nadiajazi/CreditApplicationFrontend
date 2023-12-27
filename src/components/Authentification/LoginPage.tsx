@@ -12,6 +12,8 @@ import 'react-toastify/dist/ReactToastify.css';
 export default function LoginPage()  {
   const navigate = useNavigate();
 
+
+
 const handleGetSigninClick = () => {
   navigate('/signup');
 };
@@ -32,7 +34,12 @@ const redirectUser =(role: any)=>{
       window.location.pathname =('/client/dashboard')
     }, 1500);
     
+   } else if (role=="MANGER") {
+
+    
    } else {
+    
+   
     return setTimeout(() => {
       window.location.pathname =('/admin')
     }, 1500);
@@ -48,6 +55,7 @@ const sendToServer = async()=>{
 console.log(res.data)
 localStorage.setItem('accesToken',res.data.accessToken )
 localStorage.setItem('refreshToken',res.data.refreshToken )
+localStorage.setItem('firstname',res.data.firstName )
 
 toast.success("succed")
 return redirectUser(res.data.role)

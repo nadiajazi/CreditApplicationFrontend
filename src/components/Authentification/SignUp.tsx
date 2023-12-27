@@ -18,6 +18,7 @@ export default function SignUp() {
     password: null,
     email: null,
     phone:null,
+    role:"USER"
   }),
   [error, setError] = useState(null);
   const handleChange = (e:any, type:string) => {
@@ -28,17 +29,18 @@ export default function SignUp() {
 
   const redirectUser =()=>{
     return setTimeout(() => {
-      window.location.pathname =('/verify-email')
+      window.location.pathname =('/login')
     }, 5000);
    
   }
   const sendToServer = async()=>{
     await axios.post("http://localhost:8080/api/v1/auth/register",{
-    firstname:informations.firstname,
-    lastname:informations.lastname,  
+    firstName:informations.firstname,
+    lastName:informations.lastname,  
     password:informations.password,
       email:informations.email,
-      phone:informations.phone
+      phone:informations.phone,
+      role:informations.role
 
     }).then((res)=>{
       toast.success("succed")
@@ -145,6 +147,22 @@ export default function SignUp() {
               className=" w-full text-black py-2 my-2 bg-transparent border-b border-black outline-none focus:outline-none"
             />
           </div>
+
+
+
+          <div className="relative w-full">
+            <span className="absolute right-0 top-2 text-2xl">          <IoCard />
+            </span>
+            <input
+              disabled
+              value={informations.role?informations.role:""}
+              onChange={(e)=>handleChange(e,"role")}
+              type="text"
+              placeholder="Last Name"
+              className=" w-full text-black py-2 my-2 bg-transparent border-b border-black outline-none focus:outline-none"
+            />
+          </div>
+
 
           <div className="relative w-full">
             <input
