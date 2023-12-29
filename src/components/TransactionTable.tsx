@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
-import { useProductStore, Product } from '../stores/useProductStore';
+import { useTransactionStore, Transaction} from '../stores/useTransactionStore';
 import { FaTrash } from 'react-icons/fa';
 
 interface TransactionTableProps {
-    products: Product[];
+    transactions: Transaction[];
     label: string;
     options: { id: string; label: string; checked?: boolean }[];
 }
@@ -12,28 +12,27 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ label, options }) =
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [selectedOption, setSelectedOption] = useState(options.find((opt) => opt.checked) || options[0]);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const products = useProductStore ((state) => state.products);
-    const filteredProducts = products.filter((product) =>
-      product.title.toLowerCase().includes(searchQuery.toLowerCase())
+    const transactions = useTransactionStore((state) => state.transactions);
+    const removeTransaction = useTransactionStore((state) => state.removeTransaction);
+    const filteredTransactions = transactions.filter((transaction) =>
+    transaction.title.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
     const toggleDropdown = () => {
-        setIsDropdownOpen((prev) => !prev);
-      };
+    setIsDropdownOpen((prev) => !prev);
+    };
     
-      const handleOptionChange = (option: { id: string; label: string }) => {
+    const handleOptionChange = (option: { id: string; label: string }) => {
         setSelectedOption(option);
         setIsDropdownOpen(false);
-       
-      };
+    };
     
 
-    const removeProduct = useProductStore((state) => state.removeProduct);
-        const handleDelete = (productId: number) => {
-          removeProduct(productId);
-        };
+    const handleDelete = (transactionId: string) => {
+        removeTransaction(transactionId);
+    };
 
-  return (
+    return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
     <div className="flex items-center space-x-20">
     <div className="relative inline-block text-left">
@@ -103,7 +102,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ label, options }) =
         </ul>
       </div>
     </div>
-          <div className="pb-4 bg-white">
+        <div className="pb-4 bg-white">
             <label htmlFor="table-search" className="sr-only">
             Search
             </label>
@@ -140,35 +139,35 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ label, options }) =
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr>
                 <th scope="col" className="px-6 py-3">
-                  Client Name
+                Client Name
                 </th>
                 <th scope="col" className="px-6 py-3">
-                  Date
+                Date
                 </th>
                 <th scope="col" className="px-6 py-3">
-                  Price
+                Price
                 </th>
                 <th scope="col" className="px-6 py-3">
-                  Action
+                Action
                 </th>
-              </tr>
+            </tr>
             </thead>
             <tbody>
-            {filteredProducts.map((product) => (
-                <tr key={product.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                  <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
-                    {product.title}
-                  </td>
-                  <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
-                    Date
-                  </td>
-                  <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
-                    ${product.price}
+            {filteredTransactions.map((transaction) => (
+                <tr key={transaction.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                    {transaction.title}
+                    </td>
+                    <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                    {transaction.title}
+                    </td>
+                    <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                    ${transaction.price}
                   </td>
                   <td className="px-6 py-4">
                     <button
                       className="text-red-500 hover:text-red-700"
-                      onClick={() => handleDelete(product.id)}
+                      onClick={() => handleDelete(transaction.id)}
                     >
                     <FaTrash />
                   </button>

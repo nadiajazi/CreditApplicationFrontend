@@ -46,7 +46,7 @@ const FormTransaction: React.FC<TransactionProps> = ({ onClose, clientId }) => {
   
   const handleClose = () => {
     const totalAmount = calculateTotalAmount();
-    handleTransactionSubmit(totalAmount);
+    handleTransactionSubmit(totalAmount);  // Remove this line
     navigate(`/admin/clients?clientId=${clientId}&totalAmount=${totalAmount}`);
     onClose();
   };
