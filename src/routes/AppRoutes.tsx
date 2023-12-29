@@ -12,7 +12,7 @@ import EmailVerification from '../components/Authentification/EmailVerification'
 import AdminDashboard from '../admin/AdminDashboard';
 import AdminClientManagement from '../admin/AdminClientManagement';
 import ProductManagement from '../admin/ProductManagement';
-import AdminTransaction from '../admin/AdminTransaction';
+import TransactionManagement from '../admin/AdminTransaction';
 import FormTransaction from "../components/FormTransaction";
 import AddProducts from "../components/AddProducts";
 
@@ -32,7 +32,7 @@ const AppRoutes: React.FC = () => {
         <Route path="/client/dashboard/history" element={<TransictionHistory />} />
 
         <Route path="/admin/clients" element={<AdminClientManagement />} />
-        <Route path="/admin/transaction" element={<AdminTransaction />} /> 
+        <Route path="/admin/transaction" element={<TransactionManagement />} /> 
         <Route path="/admin/products" element={<ProductManagement />} />
         <Route path="/admin/Allproduct" element={<AddProducts />} />
 
