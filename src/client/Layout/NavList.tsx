@@ -1,7 +1,10 @@
 import React from "react";
 import {Navbar,Collapse,Typography, Button, IconButton, List, ListItem, Menu, MenuHandler, MenuList,MenuItem,} from "@material-tailwind/react";
 import { ChevronDownIcon, Bars3Icon, XMarkIcon, CreditCardIcon,DocumentMagnifyingGlassIcon,ClipboardDocumentIcon,} from "@heroicons/react/24/outline";
-import { Link } from "react-router-dom";
+import { Link,  useNavigate } from "react-router-dom";
+import axios from "axios";
+
+
 
 //Element Menu
 const navListMenuItems = [
@@ -27,9 +30,11 @@ const navListMenuItems = [
 
 //Render menu item when hover
 function NavListMenu() {
+
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
-  
+
+
 
   
 
@@ -154,6 +159,22 @@ export function NavbarWithMegaMenu() {
     );
   }, []);
 
+  const navigate = useNavigate();
+  const Logout = async()=>{
+    try {
+      await axios.post("http://localhost:8080/api/v1/auth/logout");
+      console.log("Déconnexion réussie !");
+      // Vous pouvez ajouter d'autres actions de succès ici si nécessaire
+    } catch (error) {
+      console.error("Erreur lors de la déconnexion :", error);
+      // Vous pouvez gérer l'erreur ici, par exemple afficher un message à l'utilisateur
+    }
+  };
+  const handleClick=()=>{
+   navigate("/")
+    Logout()
+  
+  }
   return (
     <div className="fixed mb-16 w-full z-50 rounded-xs ">
       <Navbar className="mx-auto max-w-full bg-carribean px-4 py-2 z-10">
@@ -172,11 +193,12 @@ export function NavbarWithMegaMenu() {
 
           <div className="hidden gap-2 lg:flex bg-orange rounded-md">
 
-            <Button size="sm">
+            <Button size="sm" onClick={handleClick}>
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
-              </svg>
-
+             
+             </svg>
+               
             </Button>
           </div>
           <IconButton

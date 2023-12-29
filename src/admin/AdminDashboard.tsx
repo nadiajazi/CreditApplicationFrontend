@@ -5,8 +5,8 @@ import { useProductStore } from "../stores/useProductStore";
 
 const AdminDashboard: React.FC = () => {
   const [open, setOpen] = useState(true);
-  const clients = useClientStore((state) => state.clients);
-  const products = useProductStore((state) => state.products);
+  const { totalProducts } = useProductStore();
+  const { totalClients } = useClientStore();
 
   return (
     
@@ -17,7 +17,7 @@ const AdminDashboard: React.FC = () => {
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xl font-semibold text-gray-800">Total Clients</h2>
             <div className="bg-blue-500 text-white p-2 rounded-md">
-              <span className="font-bold text-lg">{clients.length}</span>
+              <span className="font-bold text-lg">{totalClients}</span>
             </div>
           </div>
           <div className="text-sm text-gray-600">
@@ -31,7 +31,7 @@ const AdminDashboard: React.FC = () => {
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xl font-semibold text-gray-800">Total Products</h2>
             <div className="bg-blue-500 text-white p-2 rounded-md">
-              <span className="font-bold text-lg">{products.length}</span>
+              <span className="font-bold text-lg">{totalProducts}</span>
             </div>
           </div>
           <div className="text-sm text-gray-600">

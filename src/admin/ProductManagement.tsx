@@ -19,10 +19,10 @@ const ProductManagement: React.FC = () => {
       <div className="App p-8">
         <h1 className="text-2xl font-bold mb-4">Product Dashboard</h1>
         {isLoading 
-         ? <div className='text-center text-lg'>Loading...</div> 
+        ? <div className='text-center text-lg'>Loading...</div> 
           : <ProductTable products={products} />
-           }          
-           </div>
+          }          
+          </div>
           </div>
     </section>
   );

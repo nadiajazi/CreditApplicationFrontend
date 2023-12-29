@@ -5,12 +5,15 @@ import { useNavigate } from 'react-router-dom';
 import {useState} from "react";
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
+import { FaEye, FaEyeSlash, FaPhoneAlt } from "react-icons/fa";
 
 import 'react-toastify/dist/ReactToastify.css';
 
 
 export default function LoginPage()  {
   const navigate = useNavigate();
+
+
 
 const handleGetSigninClick = () => {
   navigate('/signup');
@@ -19,6 +22,7 @@ const [informations, setInformations] = useState({
   password: null,
   email: null,
 }),
+
 [error, setError] = useState(null);
 const handleChange = (e:any, type:string) => {
   setInformations((prev) => {
@@ -26,32 +30,80 @@ const handleChange = (e:any, type:string) => {
   });
 };
 
-const redirectUser =()=>{
-   return setTimeout(() => {
-     window.location.pathname =('/Dashboard')
-   }, 5000);
+
+const [showPassword, setShowPassword] = useState(false);
+
+const togglePasswordVisibility = () => {
+  setShowPassword(!showPassword);
+};
+const redirectUser =(role: any)=>{
+   if (role=="USER") {
+    return setTimeout(() => {
+      window.location.pathname =('/client/dashboard')
+    }, 1500);
+    
+   } else if (role=="MANGER") {
+
+    
+   } else {
+    
+   
+    return setTimeout(() => {
+      window.location.pathname =('/admin')
+    }, 1500);
+    
+   }
   
  }
-const sendToServer = async()=>{
-  await axios.post("http://localhost:8080/api/v1/auth/authenticate",{
-    password:informations.password,
-    email:informations.email
-  }).then((res)=>{
-console.log(res.data)
-localStorage.setItem('accesToken',res.data.accessToken )
-localStorage.setItem('refreshToken',res.data.refreshToken )
 
-toast.success("succed")
-return redirectUser()
-  }).catch((err)=>{
-    console.log(err)
-toast.error("erreur ")
-   })
-}
-const handleClick=()=>{
-  sendToServer()
 
-}
+ const validateField = (field: string | null, fieldName: string) => {
+  if (field === null || field === "") {
+    return `Please fill in the ${fieldName} field`;
+  }
+  return null; // No error
+};
+
+ const sendToServer = async () => {
+  const errors: string[] = [];
+
+  const emailError = validateField(informations.email, "Email");
+  const passwordError = validateField(informations.password, "Password");
+
+  if (emailError) errors.push(emailError);
+  if (passwordError) errors.push(passwordError);
+
+  if (errors.length > 0) {
+    errors.forEach((error) => toast.error(error));
+  } else {
+    try {
+      const response = await axios.post("http://localhost:8080/api/v1/auth/authenticate", {
+        password: informations.password,
+        email: informations.email
+      });
+
+      const { data } = response;
+
+      console.log(data);
+
+      localStorage.setItem('accessToken', data.accessToken);
+      localStorage.setItem('refreshToken', data.refreshToken);
+      localStorage.setItem('firstname', data.firstName);
+
+      toast.success("Success");
+      
+      redirectUser(data.role);
+    } catch (error) {
+      console.error(error);
+      toast.error("Error");
+    }
+  }
+};
+
+const handleClick = () => {
+  sendToServer();
+};
+
 
   return (
 
@@ -79,13 +131,23 @@ const handleClick=()=>{
         placeholder="Email"
         className="w-full text-black py-2 my-2 bg-transparent border-b border-black outline-none focus:outline-none"
         />
-          <input
-           value={informations.password?informations.password:""}
-           onChange={(e)=>handleChange(e,"password")}
-         type="password" 
-        placeholder="Password"
-        className="w-full text-black py-4 my-2 bg-transparent border-b border-black outline-none focus:outline-none"
-        />
+        <div className="relative">
+    <input
+      value={informations.password ? informations.password : ""}
+      onChange={(e) => handleChange(e, "password")}
+      type={showPassword ? "text" : "password"}
+      placeholder="Password"
+      className="w-full text-black py-4 my-2 bg-transparent border-b border-black outline-none focus:outline-none pr-8"
+    />
+    <button
+      type="button"
+      onClick={togglePasswordVisibility}
+      className="absolute right-0 top-0 mt-7 mr-2"
+    >
+      {showPassword ? <FaEyeSlash /> : <FaEye />}
+    </button>
+  </div>
+              
       </div>
       <div className="w-full flex items-center justify-between">
         <div className="w-full flex iteams-center">

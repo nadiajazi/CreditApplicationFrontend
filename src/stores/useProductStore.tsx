@@ -12,6 +12,7 @@ export interface Product {
    }
 interface State {
     products: Product [],
+    totalProducts: number;
     isLoading : boolean,
     error: any ,
 }
@@ -24,6 +25,7 @@ interface Actions {
 
 const INITIAL_STATE: State = {
     products: [],
+    totalProducts: 0,
     isLoading: false,
     error: null,
 }
@@ -35,7 +37,8 @@ export const useProductStore = create<State & Actions>((set) => ({
             set({ isLoading: true, error: null });
             const response = await fetch("https://dummyjson.com/products");
             const data = await response.json();
-            set({ products: data.products, isLoading: false });
+            const totalProducts = data.products.length;
+            set({ products: data.products, totalProducts, isLoading: false });
         } catch (error) {
             set({ error, isLoading: false });
         }

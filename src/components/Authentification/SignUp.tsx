@@ -13,50 +13,124 @@ export default function SignUp() {
 
   
   const [informations, setInformations] = useState({
-    firstname:null,
-    lastname:null,
+    firstname: null,
+    lastname: null,
     password: null,
     email: null,
-    phone:null,
+    phone: null,
+    role:"USER"
+    
   }),
   [error, setError] = useState(null);
+  const handleChange1 = (e: any, type: string) => {
+    const inputValue = e.target.value;
+  
+    // Regular expression to match only letters (no numbers or symbols)
+    const lettersOnlyRegex = /^[a-zA-Z]+$/;
+  
+    // Check if the input value contains only letters
+    if (lettersOnlyRegex.test(inputValue) || inputValue === "") {
+      setInformations((prev) => {
+        return { ...prev, [type]: inputValue };
+      });
+    }
+  };
+  const [inputError, setInputError] = useState<string | null>(null);
+
+  const handleChange2 = (e: any, type: string) => {
+    const inputValue = e.target.value;
+  
+    // Regular expression to match numeric digits
+    const numericOnlyRegex = /^[0-9]*$/;
+  
+    if (numericOnlyRegex.test(inputValue) && inputValue.length <= 8) {
+      // If the input is a digit and total digits are 8 or less, update the state
+      setInformations((prev) => {
+        return { ...prev, [type]: inputValue };
+      });
+  
+      if (inputValue.length ===8) {
+        // If exactly 8 digits are entered, you can perform additional actions here if needed
+      }
+    } else {
+      // If the input is not a digit or more than 8 digits, display a toast message
+      toast.error("Please enter up to 8 digits for the phone number");
+    }
+  };
+  
+  
+  
+    // Check the password validation
+    
+
   const handleChange = (e:any, type:string) => {
     setInformations((prev) => {
       return { ...prev, [type]: e.target.value };
     });
   };
 
+ 
   const redirectUser =()=>{
     return setTimeout(() => {
-      window.location.pathname =('/verify-email')
+      window.location.pathname =('/login')
     }, 5000);
    
   }
-  const sendToServer = async()=>{
-    await axios.post("http://localhost:8080/api/v1/auth/register",{
-    firstname:informations.firstname,
-    lastname:informations.lastname,  
-    password:informations.password,
-      email:informations.email,
-      phone:informations.phone
+  const validateField = (field: string | null, fieldName: string) => {
+    if (field === null || field === "") {
+      return `Please fill in the ${fieldName} field`;
+    }
+    return null; // No error
+  };
 
-    }).then((res)=>{
-      toast.success("succed")
-      return redirectUser()
+  const sendToServer = async () => {
+    const errors: string[] = [];
 
-  console.log(res.data)
-    }).catch((err)=>{
-      console.log(err)
-      toast.error("erreur ")
+    // Validate each field
+    const firstnameError = validateField(informations.firstname, "First Name");
+    const lastnameError = validateField(informations.lastname, "Last Name");
+    const emailError = validateField(informations.email, "Email");
+    const passwordError = validateField(informations.password, "Password");
+    const phoneError = validateField(informations.phone, "Phone Number");
 
-     })
-  }
+    // Collect errors
+    if (firstnameError) errors.push(firstnameError);
+    if (lastnameError) errors.push(lastnameError);
+    if (emailError) errors.push(emailError);
+    if (passwordError) errors.push(passwordError);
+    if (phoneError) errors.push(phoneError);
+
+    // Display errors in toast messages
+    if (errors.length > 0) {
+      errors.forEach((error) => toast.error(error));
+    } else {
+      // Proceed with server request
+      try {
+        const res = await axios.post("http://localhost:8080/api/v1/auth/register", {
+          firstName: informations.firstname,
+          lastName: informations.lastname,
+          password: informations.password,
+          email: informations.email,
+          phone: informations.phone,
+          role:informations.role
+      
+        });
+
+        toast.success("Success");
+        return redirectUser();
+      } catch (err) {
+        console.log(err);
+        toast.error("Error");
+      }
+    }
+  };
+
+
   const handleClick=()=>{
     sendToServer()
   
   }
-  
-  {/*    pour le mot passe at le cas other dans la liste d'addrese*/ }
+
   const [selectedCity, setSelectedCity] = useState<string>("");
   const [customAddress, setCustomAddress] = useState<string>("");
   const [password, setPassword] = useState("");
@@ -101,7 +175,7 @@ export default function SignUp() {
             </span>
             <input
               value={informations.firstname?informations.firstname:""}
-              onChange={(e)=>handleChange(e,"firstname")}
+              onChange={(e)=>handleChange1(e,"firstname")}
               type="text"
               placeholder="First Name"
               className=" w-full text-black py-2 my-2 bg-transparent border-b border-black outline-none focus:outline-none"
@@ -112,7 +186,7 @@ export default function SignUp() {
             </span>
             <input
               value={informations.lastname?informations.lastname:""}
-              onChange={(e)=>handleChange(e,"lastname")}
+              onChange={(e)=>handleChange1(e,"lastname")}
               type="text"
               placeholder="Last Name"
               className=" w-full text-black py-2 my-2 bg-transparent border-b border-black outline-none focus:outline-none"
@@ -136,17 +210,27 @@ export default function SignUp() {
           <div className="relative w-full">
             <span className="absolute right-0 top-2 text-2xl"><FaPhoneAlt /> </span>
             <input
-             value={informations.phone?informations.phone:""}
-
-               onChange={(e)=>handleChange(e,"phone")}
-
-              type="text"
-              placeholder="Phone Number"
-              className=" w-full text-black py-2 my-2 bg-transparent border-b border-black outline-none focus:outline-none"
-            />
+  value={informations.phone ? informations.phone : ""}
+  onChange={(e) => handleChange2(e, "phone")}
+  type="text"
+  placeholder="Phone Number"
+  className="w-full text-black py-2 my-2 bg-transparent border-b border-black outline-none focus:outline-none"
+/>
           </div>
 
           <div className="relative w-full">
+            <span className="absolute right-0 top-2 text-2xl">          <IoCard />
+            </span>
+            <input
+              disabled
+              value={informations.role?informations.role:""}
+              onChange={(e)=>handleChange(e,"role")}
+              type="text"
+              placeholder="Last Name"
+              className=" w-full text-black py-2 my-2 bg-transparent border-b border-black outline-none focus:outline-none"
+            />
+          </div>
+ <div className="relative w-full">
             <input
               value={informations.password?informations.password:""}
               onChange={(e)=>handleChange(e,"password")}

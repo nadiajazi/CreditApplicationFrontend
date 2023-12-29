@@ -17,6 +17,7 @@ export interface Client extends User {
 
 interface State {
   clients: Client[];
+  totalClients: number;
   isLoading: boolean;
   error: any;
 }
@@ -29,6 +30,7 @@ interface Actions {
 
 const INITIAL_STATE: State = {
   clients: [],
+  totalClients: 0,
   isLoading: false,
   error: null,
 };
@@ -43,13 +45,13 @@ export const useClientStore = create<State & Actions>((set) => ({
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
       const data: User[] = await response.json();
-
+      const totalClients = data.length;
       const clientsWithTotalAmount: Client[] = data.map((client: User) => ({
         ...client,
         totalAmount: 0, 
       }));
 
-      set({ clients: clientsWithTotalAmount, isLoading: false });
+      set({ clients: clientsWithTotalAmount, totalClients, isLoading: false });
     } catch (error) {
       console.error("Error fetching data:", error);
       set({ error, isLoading: false });

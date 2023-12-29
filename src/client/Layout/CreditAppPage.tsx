@@ -7,6 +7,12 @@ const CreditAppPage: React.FC = () => {
   // Example state for user's total cost purchases
   const [totalCostPurchases, setTotalCostPurchases] = useState<number>(500);
 
+  const storedName = localStorage.getItem('firstname');
+  const [name, setName] = useState(storedName !== null ? storedName : '');
+  
+  // ... rest of your component code
+  
+
   // Calculate the progress percentage
   const progressPercentage = (totalCostPurchases / creditLimit) * 100;
 
@@ -32,7 +38,7 @@ const CreditAppPage: React.FC = () => {
 
     <div className="min-h-screen grid grid-cols-2 gap-4 items-center justify-center bg-gray-100 max-h-1500-px">
       <div className="pr-4">
-        <p className="text-carribean font-semibold text-5xl pl-10 p-6">Dear Client</p>
+        <p className="text-carribean font-semibold text-5xl pl-10 p-6">Welcome {name}</p>
         <p className="text-black text-2xl p-10 ">
           Welcome to the credit app! We're delighted to have you on board. Here's some essential information about your credit limit: manage your spending wisely and keep track of your total cost purchases.
         </p>
@@ -93,5 +99,4 @@ const CreditAppPage: React.FC = () => {
 };
 
 export default CreditAppPage;
-
 
