@@ -1,12 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AdminSideBar from "../components/AdminSideBar";
 import { useClientStore } from "../stores/useClientStore";
 import { useProductStore } from "../stores/useProductStore";
 
 const AdminDashboard: React.FC = () => {
   const [open, setOpen] = useState(true);
-  const { totalProducts } = useProductStore();
-  const { totalClients } = useClientStore();
+  const { fetchData: fetchProducts, totalProducts } = useProductStore();
+  const { fetchData: fetchClients, totalClients } = useClientStore();
+
+  useEffect(() => {
+    fetchProducts();
+    fetchClients();
+  }, [fetchProducts, fetchClients]);
+
 
   return (
     
