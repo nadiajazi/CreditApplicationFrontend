@@ -148,6 +148,9 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ label, options }) =
                 Price
                 </th>
                 <th scope="col" className="px-6 py-3">
+                Quantity
+                </th>
+                <th scope="col" className="px-6 py-3">
                 Action
                 </th>
             </tr>
@@ -159,11 +162,14 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ label, options }) =
                     {transaction.title}
                     </td>
                     <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
-                    {transaction.title}
+                    {transaction.date.toISOString()}
                     </td>
                     <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
                     ${transaction.price}
-                  </td>
+                    </td>
+                    <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                    {transaction.quantity}
+                    </td>
                   <td className="px-6 py-4">
                     <button
                       className="text-red-500 hover:text-red-700"

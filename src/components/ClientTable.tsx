@@ -1,26 +1,24 @@
 import React, { useState } from 'react';
 import { FaTrash} from 'react-icons/fa';
 import { FaMoneyBillTransfer } from "react-icons/fa6";
-import {Client, useClientStore} from '../stores/useClientStore';
+import { Client , useClientStore} from '../stores/useClientStore';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-interface ClientTableProps {
-  clients: Client[];
-  
-}
 
-const ClientTable: React.FC<ClientTableProps> = () => {
+
+const ClientTable  = () => {
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [selectedClientId, setSelectedClientId] = useState<number | null>(null);
-  const clients = useClientStore ((state) => state.clients);
-  console.log(clients);
+  const { clients, selectClient } = useClientStore();
   const filteredClients = clients.filter((client) =>
   client.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const handleRowClick = (clientId: number) => {
+  const navigate = useNavigate();
 
-    setSelectedClientId(clientId);
+  const handleSelectClient = (client: Client) => {
+    selectClient(client);
+    navigate('/admin/clients/form'); 
   };
 
   
@@ -35,10 +33,10 @@ const ClientTable: React.FC<ClientTableProps> = () => {
   return (
     
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-          <div className="pb-4 bg-white">
-            <label htmlFor="table-search" className="sr-only">
-            Search
-            </label>
+        <div className="pb-4 bg-white">
+          <label htmlFor="table-search" className="sr-only">
+          Search
+          </label>
           <div className="relative mt-1">
             <div className="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
             <svg
@@ -90,7 +88,7 @@ const ClientTable: React.FC<ClientTableProps> = () => {
         <tbody>
           {filteredClients.map((client) => (  
                 <tr
-                onClick={() => handleRowClick(client.id)}
+                onClick={() => handleSelectClient(client)}
                 key={client.id}
                 className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-900"
                 >   
@@ -118,6 +116,7 @@ const ClientTable: React.FC<ClientTableProps> = () => {
               ))}
         </tbody>
       </table>
+      
     </div>
   );
 };

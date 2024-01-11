@@ -37,8 +37,8 @@ const AppRoutes: React.FC = () => {
         <Route path="/admin/Allproduct" element={<AddProducts />} />
 
         <Route
-          path="/admin/clients/form/:clientId"
-          element={<FormTransaction onClose={() => {}} clientId={0} handleTransactionSubmit={() => {}} />}
+          path="/admin/clients/form"
+          element={<FormTransaction clientId={0}  />}
         />        
         </Routes>
       </Router>

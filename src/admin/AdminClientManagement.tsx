@@ -6,7 +6,7 @@ import { useClientStore } from "../stores/useClientStore";
 
 const AdminClientManagement: React.FC = () => {
   const [open, setOpen] = useState(true);
-  const { clients, isLoading, fetchData } = useClientStore()
+  const { isLoading, fetchData } = useClientStore()
 
   useEffect(() => { fetchData() }, [fetchData])
   return (
@@ -18,7 +18,7 @@ const AdminClientManagement: React.FC = () => {
               <h1 className="text-2xl font-bold mb-4">Client Dashboard</h1>
               {isLoading 
                 ? <div className='text-center text-lg'>Loading...</div> 
-              : <ClientTable clients={clients} />
+              : <ClientTable />
               }  
           </div>
       </div>

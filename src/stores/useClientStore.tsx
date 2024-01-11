@@ -17,6 +17,8 @@ export interface Client extends User {
 
 interface State {
   clients: Client[];
+  selectedClient: Client | null;
+  selectClient: (client: Client) => void;
   totalClients: number;
   isLoading: boolean;
   error: any;
@@ -30,28 +32,31 @@ interface Actions {
 
 const INITIAL_STATE: State = {
   clients: [],
+  selectedClient: null,
   totalClients: 0,
   isLoading: false,
   error: null,
+  selectClient: () => {}, // Temporary placeholder, will be overwritten
 };
 
 export const useClientStore = create<State & Actions>((set) => ({
   ...INITIAL_STATE,
+  selectClient: (client) => set({ selectedClient: client }),
+
   fetchData: async () => {
+    set({ isLoading: true, error: null });
     try {
-      set({ isLoading: true, error: null });
       const response = await fetch("https://jsonplaceholder.typicode.com/users");
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
       const data: User[] = await response.json();
-      const totalClients = data.length;
-      const clientsWithTotalAmount: Client[] = data.map((client: User) => ({
+      const clientsWithTotalAmount: Client[] = data.map((client) => ({
         ...client,
         totalAmount: 0, 
       }));
 
-      set({ clients: clientsWithTotalAmount, totalClients, isLoading: false });
+      set({ clients: clientsWithTotalAmount, totalClients: data.length, isLoading: false });
     } catch (error) {
       console.error("Error fetching data:", error);
       set({ error, isLoading: false });
@@ -59,16 +64,16 @@ export const useClientStore = create<State & Actions>((set) => ({
   },
 
   removeClient: (clientId: number) =>
-    set((state) => {
-      const updatedClients = state.clients.filter((item) => item.id !== clientId);
-      return { ...state, clients: updatedClients };
-    }),
+    set((state) => ({
+      clients: state.clients.filter((client) => client.id !== clientId),
+      totalClients: state.totalClients - 1
+    })),
 
-    updateTotalAmount: (clientId, transactionAmount) =>
+  updateTotalAmount: (clientId, transactionAmount) =>
     set((state) => ({
       clients: state.clients.map((client) =>
         client.id === clientId
-          ? { ...client, totalamount: client.totalAmount + transactionAmount }
+          ? { ...client, totalAmount: client.totalAmount + transactionAmount }
           : client
       ),
     })),

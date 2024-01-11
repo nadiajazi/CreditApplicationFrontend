@@ -3,24 +3,22 @@ import { fetchPriceFromDatabase } from '../services/FetchPriceFromDataBase';
 
 export interface Transaction {
   id: string;
+  clientId: number;
   title: string;
   quantity: number;
   price: number;
-  date: Date
+  date: Date;
 }
 
 interface TransactionState {
   transactions: Transaction[];
   totalItems: number;
   totalPrice: number;
-}
-
-interface TransactionActions {
-  addTransaction: (transaction: Transaction) => void;
+  addTransactionForClient: (clientId: number, transaction: Omit<Transaction, 'id' | 'clientId'>) => Promise<void>;
   removeTransaction: (id: string) => void;
 }
 
-const INITIAL_STATE: TransactionState = {
+const INITIAL_STATE: Omit<TransactionState, 'addTransactionForClient' | 'removeTransaction'> = {
   transactions: [],
   totalItems: 0,
   totalPrice: 0,
@@ -30,54 +28,52 @@ const generateId = (): string => {
   return '_' + Math.random().toString(36).substr(2, 9);
 };
 
-export const useTransactionStore = create<TransactionState & TransactionActions>((set, get) => ({
-  transactions: INITIAL_STATE.transactions,
-  totalItems: INITIAL_STATE.totalItems,
-  totalPrice: INITIAL_STATE.totalPrice,
+export const useTransactionStore = create<TransactionState>((set, get) => ({
+  ...INITIAL_STATE,
 
-  addTransaction: async (transaction) => {
+  addTransactionForClient: async (clientId, transaction) => {
     try {
       const price = await fetchPriceFromDatabase(transaction.title);
-      console.log("Fetched price from the database:", price);
-  
       set((state) => {
-        console.log("Current state before update:", state);
-  
-        const newState = {
-          transactions: [
-            ...state.transactions,
-            {
-              id: generateId(),
-              title: transaction.title,
-              quantity: transaction.quantity,
-              price: price,
-              date: transaction.date, 
-           
-            },
-          ],
-          totalItems: state.totalItems + transaction.quantity,
-          totalPrice: state.totalPrice + price * transaction.quantity,
+        const newTransaction = {
+          id: generateId(),
+          clientId: clientId,
+          ...transaction,
+          price: price,
         };
-  
-        console.log("New state after update:", newState);
-        return newState;
+
+        const updatedTransactions = [...state.transactions, newTransaction];
+        const updatedTotalItems = state.totalItems + transaction.quantity;
+        const updatedTotalPrice = state.totalPrice + (price * transaction.quantity);
+
+        return {
+          ...state,
+          transactions: updatedTransactions,
+          totalItems: updatedTotalItems,
+          totalPrice: updatedTotalPrice,
+        };
       });
     } catch (error) {
       console.error("Error adding transaction:", error);
     }
   },
+
   removeTransaction: (id) => {
     set((state) => {
-      const removedTransaction = state.transactions.find((transaction) => transaction.id === id);
-
+      const removedTransaction = state.transactions.find((t) => t.id === id);
       if (!removedTransaction) {
         return state;
       }
 
+      const updatedTransactions = state.transactions.filter((t) => t.id !== id);
+      const updatedTotalItems = state.totalItems - removedTransaction.quantity;
+      const updatedTotalPrice = state.totalPrice - (removedTransaction.price * removedTransaction.quantity);
+
       return {
-        transactions: state.transactions.filter((transaction) => transaction.id !== id),
-        totalItems: state.totalItems - removedTransaction.quantity,
-        totalPrice: state.totalPrice - removedTransaction.price * removedTransaction.quantity,
+        ...state,
+        transactions: updatedTransactions,
+        totalItems: updatedTotalItems,
+        totalPrice: updatedTotalPrice,
       };
     });
   },
