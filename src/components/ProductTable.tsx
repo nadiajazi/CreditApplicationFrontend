@@ -1,7 +1,8 @@
 import React from 'react';
 import { useState } from 'react';
-import { FaTrash } from 'react-icons/fa';
+import { FaTrash,FaEdit  } from 'react-icons/fa';
 import { useProductStore, Product } from '../stores/useProductStore';
+import { Navigate, useNavigate , useParams} from 'react-router-dom';
 
 
 interface ProductTableProps {
@@ -9,8 +10,17 @@ interface ProductTableProps {
   }
 
 const ProductTable: React.FC<ProductTableProps> = ()  => {
-      const [searchQuery, setSearchQuery] = useState<string>('');
-        const products = useProductStore ((state) => state.products);
+  const { id } = useParams();
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const navigate = useNavigate();
+  const handleGetEditClick = () => {
+    navigate('/admin/EditProduct');
+  };
+  const handleGetAddClick = () => {
+    navigate('/admin/Addproduct');
+  };
+  
+  const products = useProductStore ((state) => state.products);
         const filteredProducts = products.filter((product) =>
           product.title.toLowerCase().includes(searchQuery.toLowerCase())
         );
@@ -62,6 +72,12 @@ const ProductTable: React.FC<ProductTableProps> = ()  => {
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
+        <button 
+        className="bg-blue-500 text-white p-2 rounded-md"
+        onClick={handleGetAddClick}
+        >
+            addProduct
+            </button> 
       </div>
           <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -136,6 +152,17 @@ const ProductTable: React.FC<ProductTableProps> = ()  => {
                       onClick={() => handleDelete(product.id)}
                     >
                     <FaTrash />
+                  </button>    <button
+                      className="text-red-500 hover:text-red-700 mr-4"
+                      onClick={() => handleDelete(product.id)}
+                    >
+                    <FaTrash />
+                  </button>
+                  <button
+                      className="text-red-500 hover:text-red-700"
+                      onClick={handleGetEditClick}
+                    >
+                   <FaEdit />
                   </button>
                   </td>
                 </tr>
