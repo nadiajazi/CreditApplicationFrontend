@@ -11,23 +11,23 @@ import 'react-toastify/dist/ReactToastify.css';
 export default function SignUp() {
   const navigate = useNavigate();
 
-  
+
   const [informations, setInformations] = useState({
     firstname: null,
     lastname: null,
     password: null,
     email: null,
     phone: null,
-    role:"USER"
-    
+    role: "USER"
+
   }),
-  [error, setError] = useState(null);
+    [error, setError] = useState(null);
   const handleChange1 = (e: any, type: string) => {
     const inputValue = e.target.value;
-  
+
     // Regular expression to match only letters (no numbers or symbols)
     const lettersOnlyRegex = /^[a-zA-Z]+$/;
-  
+
     // Check if the input value contains only letters
     if (lettersOnlyRegex.test(inputValue) || inputValue === "") {
       setInformations((prev) => {
@@ -37,19 +37,19 @@ export default function SignUp() {
   };
   const [inputError, setInputError] = useState<string | null>(null);
 
-  const handleChange2 = (e: any, type: any) => {
+  const handleChange2 = (e: any, type: string) => {
     const inputValue = e.target.value;
-  
+
     // Regular expression to match numeric digits
     const numericOnlyRegex = /^[0-9]*$/;
-  
+
     if (numericOnlyRegex.test(inputValue) && inputValue.length <= 8) {
       // If the input is a digit and total digits are 8 or less, update the state
       setInformations((prev) => {
         return { ...prev, [type]: inputValue };
       });
-  
-      if (inputValue.length ===8) {
+
+      if (inputValue.length === 8) {
         // If exactly 8 digits are entered, you can perform additional actions here if needed
       }
     } else {
@@ -57,24 +57,24 @@ export default function SignUp() {
       toast.error("Please enter up to 8 digits for the phone number");
     }
   };
-  
-  
-  
-    // Check the password validation
-    
 
-  const handleChange = (e:any, type:string) => {
+
+
+  // Check the password validation
+
+
+  const handleChange = (e: any, type: string) => {
     setInformations((prev) => {
       return { ...prev, [type]: e.target.value };
     });
   };
 
- 
-  const redirectUser =()=>{
+
+  const redirectUser = () => {
     return setTimeout(() => {
-      window.location.pathname =('/login')
+      window.location.pathname = ('/login')
     }, 5000);
-   
+
   }
   const validateField = (field: string | null, fieldName: string) => {
     if (field === null || field === "") {
@@ -112,8 +112,8 @@ export default function SignUp() {
           password: informations.password,
           email: informations.email,
           tel: informations.phone,
-          role:informations.role
-      
+          role: informations.role
+
         });
 
         toast.success("Success");
@@ -126,9 +126,9 @@ export default function SignUp() {
   };
 
 
-  const handleClick=()=>{
+  const handleClick = () => {
     sendToServer()
-  
+
   }
 
   const [selectedCity, setSelectedCity] = useState<string>("");
@@ -158,7 +158,7 @@ export default function SignUp() {
 
   return (
     <div className="w-full h-screen flex items-start">
-                  <ToastContainer />
+      <ToastContainer />
 
       <div className="relative w-1/2 h-full flex flex-col">
         <img src={COVER_IMAGE} className="w-full h-full object-cover" />
@@ -173,9 +173,11 @@ export default function SignUp() {
           <div className="relative w-full">
             <span className="absolute right-0 top-2 text-2xl">          <IoCard />
             </span>
+
+            
             <input
-              value={informations.firstname?informations.firstname:""}
-              onChange={(e)=>handleChange1(e,"firstname")}
+              value={informations.firstname ? informations.firstname : ""}
+              onChange={(e) => handleChange1(e, "firstname")}
               type="text"
               placeholder="First Name"
               className=" w-full text-black py-2 my-2 bg-transparent border-b border-black outline-none focus:outline-none"
@@ -185,8 +187,8 @@ export default function SignUp() {
             <span className="absolute right-0 top-2 text-2xl">          <IoCard />
             </span>
             <input
-              value={informations.lastname?informations.lastname:""}
-              onChange={(e)=>handleChange1(e,"lastname")}
+              value={informations.lastname ? informations.lastname : ""}
+              onChange={(e) => handleChange1(e, "lastname")}
               type="text"
               placeholder="Last Name"
               className=" w-full text-black py-2 my-2 bg-transparent border-b border-black outline-none focus:outline-none"
@@ -194,14 +196,14 @@ export default function SignUp() {
           </div>
 
 
-       
+
 
           <div className="relative w-full">
             <span className="absolute right-0 top-2 text-2xl">                    <HiOutlineMail />
             </span>
             <input
-              value={informations.email?informations.email:""}
-              onChange={(e)=>handleChange(e,"email")}
+              value={informations.email ? informations.email : ""}
+              onChange={(e) => handleChange(e, "email")}
               type="email"
               placeholder="Email"
               className=" w-full text-black py-2 my-2 bg-transparent border-b border-black outline-none focus:outline-none"
@@ -210,12 +212,12 @@ export default function SignUp() {
           <div className="relative w-full">
             <span className="absolute right-0 top-2 text-2xl"><FaPhoneAlt /> </span>
             <input
-  value={informations.phone ? informations.phone : ""}
-  onChange={(e) => handleChange2(e, "phone")}
-  type="text"
-  placeholder="Phone Number"
-  className="w-full text-black py-2 my-2 bg-transparent border-b border-black outline-none focus:outline-none"
-/>
+              value={informations.phone ? informations.phone : ""}
+              onChange={(e) => handleChange2(e, "phone")}
+              type="text"
+              placeholder="Phone Number"
+              className="w-full text-black py-2 my-2 bg-transparent border-b border-black outline-none focus:outline-none"
+            />
           </div>
 
           <div className="relative w-full">
@@ -223,20 +225,20 @@ export default function SignUp() {
             </span>
             <input
               disabled
-              value={informations.role?informations.role:""}
-              onChange={(e)=>handleChange(e,"role")}
+              value={informations.role ? informations.role : ""}
+              onChange={(e) => handleChange(e, "role")}
               type="text"
               placeholder="Last Name"
               className=" w-full text-black py-2 my-2 bg-transparent border-b border-black outline-none focus:outline-none"
             />
           </div>
- <div className="relative w-full">
+          <div className="relative w-full">
             <input
-              value={informations.password?informations.password:""}
-              onChange={(e)=>handleChange(e,"password")}
+              value={informations.password ? informations.password : ""}
+              onChange={(e) => handleChange(e, "password")}
               type={showPassword ? "text" : "password"}
               placeholder="Password"
-              
+
               className="w-full text-black py-4 my-2 bg-transparent border-b border-black outline-none focus:outline-none pr-8"
             />
             <button
@@ -247,14 +249,14 @@ export default function SignUp() {
               {showPassword ? <FaEyeSlash /> : <FaEye />}
             </button>
           </div>
-         
+
         </div>
 
         <div className="w-full flex flex-col space-y-3 items-center mx-auto">
           <button className="w-1/4 bg-[#036FE6] h-8 text-[#060606] font-semibold border-2 border-black rounded-md py my-2 text-center flex items-center justify-center"
-          onClick={ handleClick}
+            onClick={handleClick}
           >
-                 Sign Up
+            Sign Up
           </button>
         </div>
       </div>
