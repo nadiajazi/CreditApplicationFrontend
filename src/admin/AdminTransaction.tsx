@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, { useState, useEffect} from "react";
 import AdminSideBar from "../components/AdminSideBar";
 import TransactionTable from "../components/TransactionTable";
 import { useTransactionStore } from "../stores/useTransactionStore";
@@ -6,7 +6,13 @@ import { useTransactionStore } from "../stores/useTransactionStore";
 
 const AdminTransaction: React.FC = () => {
   const [open, setOpen] = useState(true);
-  const { transactions } = useTransactionStore()
+  const adminPurchases = useTransactionStore((state) => state.adminPurchases);
+  const fetchAdminPurchases = useTransactionStore((state) => state.fetchAdminPurchases);
+
+  useEffect(() => {
+    fetchAdminPurchases();
+  }, [fetchAdminPurchases]);
+
   const dateOptions = [
     { id: '1', label: 'Last day' },
     { id: '2', label: 'Last 7 days' },
@@ -24,11 +30,15 @@ const AdminTransaction: React.FC = () => {
       <div className="m-3 text-xl text-gray-900 font-semibold">
       <div className="App p-8">
         <h1 className="text-2xl font-bold mb-4">Transaction Dashboard</h1>
-          <TransactionTable transactions= {transactions} label="Your Label" options={dateOptions} />          
+        {adminPurchases ? (<TransactionTable transactions={adminPurchases} label="Your Label" options={dateOptions}  />
+    ) : (
+      <p>Loading admin purchases...</p>
+    )}          
           </div>
       </div>
     </section>
   );
 };
+
 
 export default AdminTransaction;

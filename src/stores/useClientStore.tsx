@@ -1,5 +1,5 @@
 import { create } from "zustand";
-
+import apiClient, { setAuthToken } from '../utils/apiClient';
 export interface Address {
   city: string;
 }
@@ -22,6 +22,7 @@ interface State {
   totalClients: number;
   isLoading: boolean;
   error: any;
+  token: string;
 }
 
 interface Actions {
@@ -36,27 +37,26 @@ const INITIAL_STATE: State = {
   totalClients: 0,
   isLoading: false,
   error: null,
-  selectClient: () => {}, // Temporary placeholder, will be overwritten
+  token: '',
+  selectClient: () => {}, 
 };
 
-export const useClientStore = create<State & Actions>((set) => ({
+export const useClientStore = create<State & Actions>((set,get) => ({
   ...INITIAL_STATE,
   selectClient: (client) => set({ selectedClient: client }),
 
   fetchData: async () => {
     set({ isLoading: true, error: null });
     try {
-      const response = await fetch("https://jsonplaceholder.typicode.com/users");
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      const data: User[] = await response.json();
-      const clientsWithTotalAmount: Client[] = data.map((client) => ({
+      const token = get().token; 
+      setAuthToken(token); 
+      const response = await apiClient.get("/api/v1/users");
+      const clientsWithTotalAmount: Client[] = response.data.map((client: User) => ({
         ...client,
-        totalAmount: 0, 
+        totalAmount: 0,
       }));
 
-      set({ clients: clientsWithTotalAmount, totalClients: data.length, isLoading: false });
+      set({ clients: clientsWithTotalAmount, totalClients: response.data.length, isLoading: false });
     } catch (error) {
       console.error("Error fetching data:", error);
       set({ error, isLoading: false });
