@@ -16,6 +16,7 @@ import TransactionManagement from '../admin/AdminTransaction';
 import FormTransaction from "../components/FormTransaction";
 import AddProducts from "../components/AddProducts";
 import EditProduct from "../components/EditProduct";
+import EditMax from "../client/Layout/editMax";
 const AppRoutes: React.FC = () => {
     return (
       <Router>
@@ -34,6 +35,7 @@ const AppRoutes: React.FC = () => {
         <Route path="/admin/transaction" element={<TransactionManagement />} /> 
         <Route path="/admin/products" element={<ProductManagement />} />
         <Route path="/admin/Allproduct" element={<AddProducts />} />
+        <Route path="/user/editMax" element={<EditMax />} />
 
         <Route
           path="/admin/clients/form"

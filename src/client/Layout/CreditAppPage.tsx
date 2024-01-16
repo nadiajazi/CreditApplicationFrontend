@@ -1,14 +1,47 @@
+import axios from 'axios';
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+// ... (import statements)
 
 const CreditAppPage: React.FC = () => {
-  const storedmaxAmount = localStorage.getItem('maxAmount');
-  
+  const navigate = useNavigate();
+
+  const [newMaxAmount, setNewMaxAmount] = useState<number | null>(null);
+
+  useEffect(() => {
+    const fetchMaxAmount = async () => {
+      try {
+        const accessToken = localStorage.getItem('accessToken');
+        const userId = localStorage.getItem('id');
+
+        const response = await axios.get(`http://localhost:8080/api/v1/user/maxAmount/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+        console.log(response.data);
+        setNewMaxAmount(response.data);
+      } catch (error) {
+        console.error('Error fetching max amount:', error);
+      }
+    };
+
+    fetchMaxAmount();
+  }, []);
+
   const [totalCostPurchases, setTotalCostPurchases] = useState<number>(500);
   const storedName = localStorage.getItem('firstname');
   const storedId = localStorage.getItem('id');
   const [name, setName] = useState<string>(storedName !== null ? storedName : '');
 
-  const progressPercentage = (totalCostPurchases / Number(storedmaxAmount)) * 100;
+  if (newMaxAmount === null) {
+    // Loading state or handle it as appropriate
+    return <div>Loading...</div>;
+  }
+
+  // Add a check for newMaxAmount
+  const progressPercentage = newMaxAmount ? (totalCostPurchases / Number(newMaxAmount)) * 100 : 0;
 
   const colorScale = [
     { percentage: 0, color: 'limegreen' },
@@ -26,12 +59,7 @@ const CreditAppPage: React.FC = () => {
     return 'red';
   };
 
-
-
-
-
   return (
-
     <div className="min-h-screen grid grid-cols-2 gap-4 items-center justify-center bg-gray-100 max-h-1500-px">
       <div className="pr-4">
         <p className="text-carribean font-semibold text-5xl pl-10 p-6">Welcome {name}</p>
@@ -49,7 +77,7 @@ const CreditAppPage: React.FC = () => {
             <div className="flex mb-2 items-center justify-between">
               <div>
                 <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-black " style={{ backgroundColor: getColor(), }}>
-                  {`${totalCostPurchases} / ${storedmaxAmount} DT`}
+                  {`${totalCostPurchases} / ${newMaxAmount} DT`}
                 </span>
               </div>
               <div className="text-right">
@@ -83,8 +111,7 @@ const CreditAppPage: React.FC = () => {
         <button
           className="bg-orange text-carribean px-4 py-2 rounded-xl "
           onClick={() => {
-            // Add logic to update totalCostPurchases
-            
+            navigate('/user/editMax');
           }}
         >
           Change Limit Amount
@@ -95,8 +122,3 @@ const CreditAppPage: React.FC = () => {
 };
 
 export default CreditAppPage;
-
-function async(storedId: string | null, arg1: number) {
-  throw new Error('Function not implemented.');
-}
-

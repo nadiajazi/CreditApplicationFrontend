@@ -44,11 +44,13 @@ export default function EditProduct  ()  {
     }, []);
     const loadProduct = async () => {
       try {
+        const storedAccessToken = localStorage.getItem("accessToken");
         const result = await axios.get(`http://localhost:8080/Product/${id}`, {
           headers: {
-            Authorization:` Bearer ${accessToken}`,
+            Authorization:` Bearer ${storedAccessToken}`,
           },
         });
+        console.log(id)
         console.log("Product Data:", result.data);
         setProductData(result.data);
       } catch (error: any) {

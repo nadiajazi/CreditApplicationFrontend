@@ -100,11 +100,11 @@ interface ProductTableProps {
             </thead>
             <tbody>
             {filteredProducts.map((product) => (
-                <tr key={product.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <tr key={product.id} className="bg-white border-b dark:bg-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                   <td className="p-4">
                     <img src={Array.isArray(product.images) ? product.images[0] : ""} className="w-16 md:w-32 max-w-full max-h-full" alt="" />
                   </td>
-                  <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                  <td className="px-6 py-4 font-semibold text-gray-900 dark:text-black">
                     {product.title}
                   </td>
                   <td className="px-6 py-4">
