@@ -2,16 +2,15 @@ import {create } from "zustand";
 
 export interface Product {
     id: number
-    title: string
+    name: string
     price: number
-    discountPercentage: number
-    stock: number
-    category: string
-    images: string[]
-    quantity?: number
+    images: string
+    quantity: number
+    purchaseDate: Date;
    }
 interface State {
     products: Product [],
+    totalProducts: number;
     isLoading : boolean,
     error: any ,
 }
@@ -24,6 +23,7 @@ interface Actions {
 
 const INITIAL_STATE: State = {
     products: [],
+    totalProducts: 0,
     isLoading: false,
     error: null,
 }
@@ -31,24 +31,61 @@ const INITIAL_STATE: State = {
 export const useProductStore = create<State & Actions>((set) => ({
     ...INITIAL_STATE,
     fetchData: async () => {
-        try {
-            set({ isLoading: true, error: null });
-            const response = await fetch("https://dummyjson.com/products");
-            const data = await response.json();
-            set({ products: data.products, isLoading: false });
-        } catch (error) {
-            set({ error, isLoading: false });
+      try {
+        set({ isLoading: true, error: null });
+        const accessToken = localStorage.getItem("accessToken");
+  
+        const response = await fetch("http://localhost:8080/Products", {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+  
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
         }
+  
+        const data = await response.json();
+        console.log(data);
+  
+        const totalProducts = data.length; // Assuming data is an array
+  
+        set((state) => {
+          const updatedState = { products: data, totalProducts, isLoading: false };
+          localStorage.setItem('productData', JSON.stringify(updatedState));
+          return updatedState;
+        });
+      } catch (error) {
+        set({ error, isLoading: false });
+      }
     },
 
-    removeProduct: (productId:number) =>
-    set((state) => {
-      const updatedProducts = state.products.filter((item) => item.id !== productId);
-      
-      return { ...state, products: updatedProducts };
-    }),
-  
-
+    removeProduct: async (productId) => {
+      try {
+        const accessToken = localStorage.getItem('accessToken');
+        
+        const response = await fetch(`http://localhost:8080/Product/${productId}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+    
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+    
+        set((state) => {
+          const updatedProducts = state.products.filter((item) => item.id !== productId);
+          return { ...state, products: updatedProducts };
+        });
+      } catch (error) {
+        // Gérer les erreurs, par exemple, afficher un message à l'utilisateur ou journaliser l'erreur.
+        console.error('Erreur lors de la suppression du produit:', error);
+      }
+    }
+,    
     incrementQuantity: (productId: number) =>
     set((state) => ({
       products: state.products.map((product) =>

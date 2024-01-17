@@ -7,7 +7,10 @@ const LandingPage: React.FC = () => {
   const navigate = useNavigate();
 
   const handleGetStartedClick = () => {
+
     navigate('/login');
+
+
   };
   return (
     <div className="flex flex-col md:flex-row justify-center items-center h-screen">
@@ -27,8 +30,7 @@ const LandingPage: React.FC = () => {
         <img src={illustration} alt="Illustration" className="w-full h-full object-cover" />
       </div>
     </div>
-  );
+  )
 };
 
 export default LandingPage;
-

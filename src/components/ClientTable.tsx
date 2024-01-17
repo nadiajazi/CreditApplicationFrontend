@@ -1,26 +1,26 @@
 import React, { useState } from 'react';
 import { FaTrash} from 'react-icons/fa';
 import { FaMoneyBillTransfer } from "react-icons/fa6";
-import {Client, useClientStore} from '../stores/useClientStore';
+import { Client , useClientStore} from '../stores/useClientStore';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-interface ClientTableProps {
-  clients: Client[];
-  
-}
 
-const ClientTable: React.FC<ClientTableProps> = () => {
+
+const ClientTable  = () => {
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [selectedClientId, setSelectedClientId] = useState<number | null>(null);
-  const clients = useClientStore ((state) => state.clients);
-  console.log(clients);
+  const { clients, selectClient } = useClientStore();
   const filteredClients = clients.filter((client) =>
-  client.name.toLowerCase().includes(searchQuery.toLowerCase())
+  client.firstName.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const handleRowClick = (clientId: number) => {
+  const navigate = useNavigate();
 
-    setSelectedClientId(clientId);
+  const handleSelectClient = (client: Client) => {
+    selectClient(client);
+    navigate('/admin/clients/form'); 
+    console.log(client.id)
+     localStorage.setItem('id2',String(client.id))
   };
 
   
@@ -29,16 +29,17 @@ const ClientTable: React.FC<ClientTableProps> = () => {
   const removeClient = useClientStore((state) => state.removeClient);
 
     
-  const handleDelete = (clientId: number) => {
+  const handleDelete = (clientId: number, event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation()
       removeClient(clientId);
   };
   return (
     
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-          <div className="pb-4 bg-white">
-            <label htmlFor="table-search" className="sr-only">
-            Search
-            </label>
+        <div className="pb-4 bg-white mb-5" >
+          <label htmlFor="table-search" className="sr-only">
+          Search
+          </label>
           <div className="relative mt-1">
             <div className="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
             <svg
@@ -67,20 +68,28 @@ const ClientTable: React.FC<ClientTableProps> = () => {
           />
         </div>
       </div>
-      <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+      <table className="w-full text-sm text-left rtl:text-right text-gray-900 dark:text-gray-400">
       <thead>
           <tr >
             <th scope="col" className="px-6 py-3">
-              Name
+              Firstname
+            </th>
+            <th scope="col" className="px-6 py-3">
+              Lastname
             </th>
             <th scope="col" className="px-6 py-3">
               Email
             </th>
             <th scope="col" className="px-6 py-3">
-              Address
+              Montant
             </th>
+            
             <th scope="col" className="px-6 py-3">
-              Total amount
+              Max Amount
+            </th>
+           
+            <th scope="col" className="px-6 py-3">
+              Role
             </th>
             <th scope="col" className="px-6 py-3">
               Action
@@ -90,16 +99,18 @@ const ClientTable: React.FC<ClientTableProps> = () => {
         <tbody>
           {filteredClients.map((client) => (  
                 <tr
-                onClick={() => handleRowClick(client.id)}
+                onClick={() => handleSelectClient(client)}
                 key={client.id}
-                className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-900"
+                className="bg-white border-b  dark:border-gray-700 cursor-pointer  "
                 >   
-                <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                  {client.name}
+                <td className="px-6 py-4 font-medium text-black whitespace-nowrap ">
+                  {client.firstName}
                 </td>
+                <td className="px-6 py-4">{client.lastName}</td>
                 <td className="px-6 py-4">{client.email}</td>
-                <td className="px-6 py-4">{client.address.city}</td>
-                <td className="px-6 py-4">{client.totalAmount.toFixed(3) } TND</td>
+                <td className="px-6 py-4">{client.montant.toFixed(3) } TND</td>
+                <td className="px-6 py-4">{client.maxAmount.toFixed(3) } TND</td>
+                <td className="px-6 py-4">{client.role}</td>
                 <td className="px-6 py-4 flex-direction-row">
                       <div className="flex items-center">
                         <Link to={`/admin/clients/form/${client.id}`}>
@@ -107,8 +118,8 @@ const ClientTable: React.FC<ClientTableProps> = () => {
                         </Link>
 
                         <button
-                            className="text-red-500 hover:text-red-700 mr-2"
-                            onClick={() => handleDelete(client.id)}
+                            className="text-red-500 hover:text-red-700 ml-5"
+                            onClick={(event) => handleDelete(client.id, event)}
                         >
                             <FaTrash />
                     </button>                      
@@ -118,6 +129,7 @@ const ClientTable: React.FC<ClientTableProps> = () => {
               ))}
         </tbody>
       </table>
+      
     </div>
   );
 };

@@ -1,40 +1,45 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LandingPage from '../landing/LandingPage';
-// import LoginPage from '../components/Authentication/LoginPage';
-// import SignUpPage from '../components/Authentication/SignUpPage';
-// import EmailVerificationPage from '../auth/EmailVerificationPage';
-// import Dashboard from '../client/Dashboard';
-// import TransactionHistory from '../client/TransactionHistory';
-// import PaymentPage from '../client/PaymentPage';
-// import InvoicesPage from '../client/InvoicesPage';
+
+import Dachboard from "../client/Dachboard";
+import InvoicesPage from '../client/InvoicesPage';
+import PaymentPage from "../client/PaymentPage";
+import TransictionHistory from "../client/TransictionHistory";
+import LoginPage from "../components/Authentification/LoginPage";
+import SignUp from "../components/Authentification/SignUp";
+import EmailVerification from '../components/Authentification/EmailVerification';
 import AdminDashboard from '../admin/AdminDashboard';
 import AdminClientManagement from '../admin/AdminClientManagement';
 import ProductManagement from '../admin/ProductManagement';
-import AdminTransaction from '../admin/AdminTransaction';
+import TransactionManagement from '../admin/AdminTransaction';
 import FormTransaction from "../components/FormTransaction";
-
+import AddProducts from "../components/AddProducts";
+import EditProduct from "../components/EditProduct";
+import EditMax from "../client/Layout/editMax";
 const AppRoutes: React.FC = () => {
     return (
       <Router>
         <Routes>
         <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<LoginPage  />} />
+        <Route path="/emailVerification" element={<EmailVerification  />} />
+        <Route path="/signUp" element={<SignUp />} />
         <Route path="/admin" element={<AdminDashboard />} />
-        {/* <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignUpPage />} />
-        <Route path="/verify-email" element={<EmailVerificationPage />} />
-        <Route path="/client" element={<Dashboard />} />
-        <Route path="/client/transactions" element={<TransactionHistory />} />
-        <Route path="/client/payment" element={<PaymentPage />} />
-        <Route path="/client/invoices" element={<InvoicesPage />} />
-        <Route path="/admin" element={<AdminDashboard />} />
-        */}
+        <Route path="/client/dashboard" element={<Dachboard />} />
+        <Route path="/client/dashboard/invoices" element={<InvoicesPage />} />
+        <Route path="/client/dashboard/payment" element={<PaymentPage />} />
+        <Route path="/client/dashboard/history" element={<TransictionHistory />} />
+        <Route path="/admin/EditProduct/:id" element={<EditProduct />} />
         <Route path="/admin/clients" element={<AdminClientManagement />} />
-        <Route path="/admin/transaction" element={<AdminTransaction />} /> 
+        <Route path="/admin/transaction" element={<TransactionManagement />} /> 
         <Route path="/admin/products" element={<ProductManagement />} />
+        <Route path="/admin/Allproduct" element={<AddProducts />} />
+        <Route path="/user/editMax" element={<EditMax />}/>
+
         <Route
-          path="/admin/clients/form/:clientId"
-          element={<FormTransaction onClose={() => {}} clientId={0} handleTransactionSubmit={() => {}} />}
+          path="/admin/clients/form"
+          element={<FormTransaction clientId={0}  />}
         />        
         </Routes>
       </Router>

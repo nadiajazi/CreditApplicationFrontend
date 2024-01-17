@@ -6,17 +6,24 @@ export interface Address {
 
 export interface User {
   id: number;
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
-  address: Address;
+  role: string;
+  montant: number;
+  maxAmount: number;
+
 }
 
 export interface Client extends User {
-  totalAmount: number;
+ 
 }
 
 interface State {
   clients: Client[];
+  selectedClient: Client | null;
+  selectClient: (client: Client) => void;
+  totalClients: number;
   isLoading: boolean;
   error: any;
 }
@@ -24,49 +31,83 @@ interface State {
 interface Actions {
   fetchData: () => Promise<void>;
   removeClient: (clientId: number) => void;
-  updateTotalAmount: (clientId: number, transactionAmount: number) => void;
+  updatemontant: (clientId: number, transactionAmount: number) => void;
 }
 
 const INITIAL_STATE: State = {
   clients: [],
+  selectedClient: null,
+  totalClients: 0,
   isLoading: false,
   error: null,
+  selectClient: () => { }, // Temporary placeholder, will be overwritten
 };
 
+
 export const useClientStore = create<State & Actions>((set) => ({
+
   ...INITIAL_STATE,
+  selectClient: (client) => set({ selectedClient: client }),
+  
   fetchData: async () => {
+    set({ isLoading: true, error: null });
     try {
-      set({ isLoading: true, error: null });
-      const response = await fetch("https://jsonplaceholder.typicode.com/users");
+      const accessToken = localStorage.getItem("accessToken");
+  
+      const response = await fetch("http://localhost:8080/api/v1/management/users", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+  
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
+  
       const data: User[] = await response.json();
-
-      const clientsWithTotalAmount: Client[] = data.map((client: User) => ({
-        ...client,
-        totalAmount: 0, 
+      const clientsWithMontant: Client[] = data.map((user) => ({
+        ...user,
+        montant: user.montant, // Set an initial value for montant
+        maxAmount: user.maxAmount,   // Set an initial value for maxAmount
       }));
-
-      set({ clients: clientsWithTotalAmount, isLoading: false });
+  
+      set({ clients: clientsWithMontant, totalClients: clientsWithMontant.length, isLoading: false });
     } catch (error) {
       console.error("Error fetching data:", error);
       set({ error, isLoading: false });
     }
   },
+  
+  removeClient: async (clientId: number) => {
+    try {
+      const accessToken = localStorage.getItem('accessToken');
+      const response = await fetch(`http://localhost:8080/api/v1/management/user/${clientId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
 
-  removeClient: (clientId: number) =>
-    set((state) => {
-      const updatedClients = state.clients.filter((item) => item.id !== clientId);
-      return { ...state, clients: updatedClients };
-    }),
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
 
-    updateTotalAmount: (clientId, transactionAmount) =>
+      // If API request is successful, update the state
+      set((state) => ({
+        clients: state.clients.filter((client) => client.id !== clientId),
+        totalClients: state.totalClients - 1,
+      }));
+    } catch (error) {
+      console.error('Error deleting user:', error);
+    }
+  },
+
+  updatemontant: (clientId, transactionAmount) =>
     set((state) => ({
       clients: state.clients.map((client) =>
         client.id === clientId
-          ? { ...client, totalamount: client.totalAmount + transactionAmount }
+          ? { ...client, montant: client.montant + transactionAmount }
           : client
       ),
     })),

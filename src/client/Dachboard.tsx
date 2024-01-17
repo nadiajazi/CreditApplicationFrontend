@@ -1,15 +1,22 @@
-import React from 'react'
+import React from "react";
+import {NavbarWithMegaMenu} from "./Layout/NavList";
+import CreditAppPage from "./Layout/CreditAppPage";
 
-export default function Dachboard() {
+
+const Dachboard = () => {
+  
+
   return (
     <div>
-      {/* UI Elements:
-        Display of the client's credit information.
-      Navigation links to:
-        Transaction History Page
-        Payment Page
-        Invoices Page */}
+      
+      <NavbarWithMegaMenu></NavbarWithMegaMenu>
+      <CreditAppPage></CreditAppPage>
+
     </div>
-  )
-}
+    
+  );
+};
+
+export default Dachboard;
+
 
