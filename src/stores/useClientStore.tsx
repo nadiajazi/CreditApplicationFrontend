@@ -10,9 +10,8 @@ export interface User {
   firstName: string;
   lastName: string;
   email: string;
-
   role: string;
-  totalAmount: number;
+  montant: number;
   maxAmount: number;
 
 }
@@ -33,7 +32,7 @@ interface State {
 interface Actions {
   fetchData: () => Promise<void>;
   removeClient: (clientId: number) => void;
-  updateTotalAmount: (clientId: number, transactionAmount: number) => void;
+  updatemontant: (clientId: number, transactionAmount: number) => void;
 }
 
 const INITIAL_STATE: State = {
@@ -67,13 +66,13 @@ export const useClientStore = create<State & Actions>((set) => ({
       }
   
       const data: User[] = await response.json();
-      const clientsWithTotalAmount: Client[] = data.map((user) => ({
+      const clientsWithMontant: Client[] = data.map((user) => ({
         ...user,
-        totalAmount: user.totalAmount, // Set an initial value for totalAmount
+        montant: user.montant, // Set an initial value for montant
         maxAmount: user.maxAmount,   // Set an initial value for maxAmount
       }));
   
-      set({ clients: clientsWithTotalAmount, totalClients: clientsWithTotalAmount.length, isLoading: false });
+      set({ clients: clientsWithMontant, totalClients: clientsWithMontant.length, isLoading: false });
     } catch (error) {
       console.error("Error fetching data:", error);
       set({ error, isLoading: false });
@@ -105,11 +104,11 @@ export const useClientStore = create<State & Actions>((set) => ({
     }
   },
 
-  updateTotalAmount: (clientId, transactionAmount) =>
+  updatemontant: (clientId, transactionAmount) =>
     set((state) => ({
       clients: state.clients.map((client) =>
         client.id === clientId
-          ? { ...client, totalAmount: client.totalAmount + transactionAmount }
+          ? { ...client, montant: client.montant + transactionAmount }
           : client
       ),
     })),

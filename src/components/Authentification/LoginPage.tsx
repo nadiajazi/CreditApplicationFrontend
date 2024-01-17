@@ -90,7 +90,8 @@ const redirectUser =(role: any)=>{
       localStorage.setItem('refreshToken', data.refreshToken);
       localStorage.setItem('firstname', data.firstName);
       localStorage.setItem('id', data.id);
-      localStorage.setItem('maxAmount', data.maxAmount);
+      console.log('id', data.id);
+      localStorage.setItem('maxAmount', data.montant);
 
 
 

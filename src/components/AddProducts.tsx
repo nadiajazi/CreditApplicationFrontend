@@ -9,7 +9,7 @@ export default function AddProducts() {
   const [accessToken, setAccessToken] = useState<string>(""); // Set initial state to an empty string
 
   const [productData, setProductData] = useState({
-    title: "",
+    name: "",
     quantity: "",
     price: "",
     ref: "",
@@ -17,7 +17,7 @@ export default function AddProducts() {
 
   });
 
-  const { title, quantity, price, ref, images } = productData;
+  const { name, quantity, price, ref, images } = productData;
 
   useEffect(() => {
     // Fetch the access token from local storage (adjust the key accordingly)
@@ -94,8 +94,8 @@ export default function AddProducts() {
                 type="text"
                 className="form-input mt-1 p-2 border rounded-md"
                 placeholder="Enter product name"
-                name="title"
-                value={title}
+                name="name"
+                value={name}
                 onChange={(e) => onInputChange(e)}
                 style={{ backgroundColor: '#E3E5E6' }}
               />

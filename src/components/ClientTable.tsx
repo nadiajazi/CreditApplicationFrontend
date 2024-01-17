@@ -20,6 +20,7 @@ const ClientTable  = () => {
     selectClient(client);
     navigate('/admin/clients/form'); 
     console.log(client.id)
+     localStorage.setItem('id2',String(client.id))
   };
 
   
@@ -80,7 +81,7 @@ const ClientTable  = () => {
               Email
             </th>
             <th scope="col" className="px-6 py-3">
-              Total Amount
+              Montant
             </th>
             
             <th scope="col" className="px-6 py-3">
@@ -107,7 +108,7 @@ const ClientTable  = () => {
                 </td>
                 <td className="px-6 py-4">{client.lastName}</td>
                 <td className="px-6 py-4">{client.email}</td>
-                <td className="px-6 py-4">{client.totalAmount.toFixed(3) } TND</td>
+                <td className="px-6 py-4">{client.montant.toFixed(3) } TND</td>
                 <td className="px-6 py-4">{client.maxAmount.toFixed(3) } TND</td>
                 <td className="px-6 py-4">{client.role}</td>
                 <td className="px-6 py-4 flex-direction-row">

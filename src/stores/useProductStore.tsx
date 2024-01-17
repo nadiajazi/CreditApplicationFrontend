@@ -2,13 +2,10 @@ import {create } from "zustand";
 
 export interface Product {
     id: number
-    title: string
+    name: string
     price: number
-    discountPercentage: number
-    stock: number
-    category: string
-    images: string[]
-    quantity?: number
+    images: string
+    quantity: number
    }
 interface State {
     products: Product [],

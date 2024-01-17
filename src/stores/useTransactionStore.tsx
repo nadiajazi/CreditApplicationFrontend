@@ -1,80 +1,109 @@
 import { create } from 'zustand';
-import { fetchPriceFromDatabase } from '../services/FetchPriceFromDataBase';
+import { Product } from './useProductStore';
 
 export interface Transaction {
-  id: string;
-  clientId: number;
-  title: string;
+  id: number;
+  userId: number;
+  amount: number;
+  name: string;
   quantity: number;
+  product: Product;
   price: number;
-  date: Date;
+  purchasedate: Date;
+  purchaseName: string;
+
 }
 
-interface TransactionState {
-  transactions: Transaction[];
-  totalItems: number;
-  totalPrice: number;
-  addTransactionForClient: (clientId: number, transaction: Omit<Transaction, 'id' | 'clientId'>) => Promise<void>;
-  removeTransaction: (id: string) => void;
+interface TransactionStore {
+  adminPurchases: Transaction[] | null;
+  clientPurchases: Transaction[] | null;
+  fetchAdminPurchases: () => void;
+  fetchClientPurchases: (clientId: number) => void;
+  addPurchase: (name: string, quantity: number,userId: number ) => void;
 }
 
-const INITIAL_STATE: Omit<TransactionState, 'addTransactionForClient' | 'removeTransaction'> = {
-  transactions: [],
-  totalItems: 0,
-  totalPrice: 0,
-};
 
-const generateId = (): string => {
-  return '_' + Math.random().toString(36).substr(2, 9);
-};
+export const useTransactionStore = create<TransactionStore>((set) => {
+  return {
+    adminPurchases: null,
+    clientPurchases: null,
 
-export const useTransactionStore = create<TransactionState>((set, get) => ({
-  ...INITIAL_STATE,
+    fetchAdminPurchases: async () => {
+      const token = localStorage.getItem('accessToken');
+      if (!token) {
+        console.error('Authentication token not found in local storage');
+        return;
+      }
+    
+      try {
+        const response = await fetch('http://localhost:8080/api/purchases/admin', {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+    
+        if (!response.ok) {
+          throw new Error('Error fetching admin purchases');
+        }
+    
+        const data = await response.json();
+        set((state) => ({ ...state, adminPurchases: data }));
+        console.log(data);
+      } catch (error) {
+        console.error('Error fetching admin purchases:', error);
+      }
+    },
 
-  addTransactionForClient: async (clientId, transaction) => {
-    try {
-      const price = await fetchPriceFromDatabase(transaction.title);
-      set((state) => {
-        const newTransaction = {
-          id: generateId(),
-          clientId: clientId,
-          ...transaction,
-          price: price,
-        };
-
-        const updatedTransactions = [...state.transactions, newTransaction];
-        const updatedTotalItems = state.totalItems + transaction.quantity;
-        const updatedTotalPrice = state.totalPrice + (price * transaction.quantity);
-
-        return {
-          ...state,
-          transactions: updatedTransactions,
-          totalItems: updatedTotalItems,
-          totalPrice: updatedTotalPrice,
-        };
-      });
-    } catch (error) {
-      console.error("Error adding transaction:", error);
-    }
-  },
-
-  removeTransaction: (id) => {
-    set((state) => {
-      const removedTransaction = state.transactions.find((t) => t.id === id);
-      if (!removedTransaction) {
-        return state;
+    fetchClientPurchases: async (userId: number) => {
+      set({ clientPurchases: null }); // Reset state before fetching
+      const token = localStorage.getItem('accessToken');
+      if (!token) {
+        console.error('Authentication token not found in local storage');
+        return;
       }
 
-      const updatedTransactions = state.transactions.filter((t) => t.id !== id);
-      const updatedTotalItems = state.totalItems - removedTransaction.quantity;
-      const updatedTotalPrice = state.totalPrice - (removedTransaction.price * removedTransaction.quantity);
+      try {
+        const response = await fetch(`http://localhost:8080/api/purchases/client/${userId}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+        const data = await response.json();
+        set({ clientPurchases: data });
+      } catch (error) {
+        console.error('Error fetching client purchases:', error);
+      }
+    },
 
-      return {
-        ...state,
-        transactions: updatedTransactions,
-        totalItems: updatedTotalItems,
-        totalPrice: updatedTotalPrice,
-      };
-    });
-  },
-}));
+    addPurchase: async (name: string, quantity: number, userId: number) => {
+      const token = localStorage.getItem('accessToken');
+      if (!token) {
+        console.error('Authentication token not found in local storage');
+        return;
+      }
+      console.log({ name, quantity, userId })
+      try {
+        const response = await fetch('http://localhost:8080/api/purchases/admin', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          
+          },
+          
+          body: JSON.stringify({ name, quantity, userId }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Error adding purchase');
+        console.log({ name, quantity, userId })
+        }
+
+
+       
+      } catch (error) {
+        console.error('Error adding purchase:', error);
+      }
+    },
+  };
+});

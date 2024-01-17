@@ -11,7 +11,7 @@ export default function EditProduct  ()  {
     const [accessToken, setAccessToken] = useState<string>("");
     const [refreshToken, setRefreshToken] = useState<string>("");
     const [productData, setProductData] = useState({
-      title: "",
+      name: "",
       quantity: "",
       price: "",
       ref: "",
@@ -19,7 +19,7 @@ export default function EditProduct  ()  {
   
     });
   
-    const { title, quantity, price, ref, images } = productData;
+    const { name, quantity, price, ref, images } = productData;
   
     const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       setProductData({ ...productData, [e.target.name]: e.target.value });
@@ -146,8 +146,8 @@ export default function EditProduct  ()  {
                   type="text"
                   className="form-input mt-1 p-2 border rounded-md"
                   placeholder="Enter product name"
-                  name="title"
-                  value={title}
+                  name="name"
+                  value={name}
                   onChange={(e) => onInputChange(e)}
                 />
               </div>
