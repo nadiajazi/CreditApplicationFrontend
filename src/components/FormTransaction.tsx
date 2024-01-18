@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTransactionStore } from '../stores/useTransactionStore';
 import { useNavigate } from 'react-router-dom';
 
@@ -7,7 +7,7 @@ interface TransactionProps {
 }
 
 const FormTransaction: React.FC<TransactionProps> = ({ clientId }) => {
-  const [productName, setProductName] = useState<string>("");
+  const [name, setname] = useState<string>("");
   const [quantity, setQuantity] = useState<number>(1);
   const addPurchase = useTransactionStore((state) => state.addPurchase);
   const adminPurchases = useTransactionStore((state) => state.adminPurchases);
@@ -15,7 +15,7 @@ const FormTransaction: React.FC<TransactionProps> = ({ clientId }) => {
   const navigate = useNavigate();
 
   const handleProductNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setProductName(e.target.value);
+    setname(e.target.value);
   };
 
   const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -24,15 +24,20 @@ const FormTransaction: React.FC<TransactionProps> = ({ clientId }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const iduser = localStorage.getItem('id2');
+    console.log(iduser);
+    await addPurchase(name, quantity, Number(iduser));
 
-    await addPurchase(productName, quantity);
-
-    setProductName('');
-    setQuantity(1); 
+    setname('');
+    setQuantity(1);
   };
 
   const handleClose = () => {
     navigate(`/admin/clients`);
+  };
+
+  const formatDate = (date: Date): string => {
+    return date.toISOString().slice(0, 16).replace('T', ' ');
   };
 
   return (
@@ -45,7 +50,7 @@ const FormTransaction: React.FC<TransactionProps> = ({ clientId }) => {
             placeholder="Product title"
             required
             onChange={handleProductNameChange}
-            value={productName}
+            value={name}
           />
         </div>
         <div className="mb-4">
@@ -66,13 +71,14 @@ const FormTransaction: React.FC<TransactionProps> = ({ clientId }) => {
         </button>
       </form>
       <div className="mt-4">
+        <h4 className="text-xl font-semibold">Purchase List</h4>
         <ul>
           {adminPurchases?.map((transaction) => (
             <li key={transaction.id} className="flex justify-between items-center border-b py-2">
               <div>
-                <span>{transaction.productName}</span>
+                <span>{transaction.purchaseName}</span>
                 <span className="ml-4">Quantity: {transaction.quantity}</span>
-                <span className="ml-4">Date: {transaction.purchasedate.toISOString()}</span>
+                <span className="ml-4">Date: {formatDate(new Date(transaction.purchaseDate))}</span>
               </div>
               <div>
                 <span>Amount: ${transaction.amount}</span>
@@ -81,7 +87,9 @@ const FormTransaction: React.FC<TransactionProps> = ({ clientId }) => {
           ))}
         </ul>
         <div className="mt-4">
-          <h4 className="text-xl font-semibold"> Total Amount: ${adminPurchases ? adminPurchases.reduce((acc, curr) => acc + curr.amount, 0) : 0}</h4>
+          <h4 className="text-xl font-semibold">
+            Total Amount: ${adminPurchases ? adminPurchases.reduce((acc, curr) => acc + curr.amount, 0) : 0}
+          </h4>
         </div>
       </div>
       <div className="mt-6">
@@ -96,11 +104,8 @@ const FormTransaction: React.FC<TransactionProps> = ({ clientId }) => {
   );
 };
 
+
 export default FormTransaction;
-
-
-
-
 
 
 

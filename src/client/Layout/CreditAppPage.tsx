@@ -1,22 +1,71 @@
-import React, { useState } from 'react';
+import axios from 'axios';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+// ... (import statements)
 
 const CreditAppPage: React.FC = () => {
-  // Assume the user's credit limit is $1000
-  const creditLimit = 1000;
+  const navigate = useNavigate();
 
-  // Example state for user's total cost purchases
+  const [newMaxAmount, setNewMaxAmount] = useState<number | null>(null);
+  const [montant, setMontant] = useState<number | null>(null);
+
+  useEffect(() => {
+    const fetchMaxAmount = async () => {
+      try {
+        const accessToken = localStorage.getItem('accessToken');
+        const userId = localStorage.getItem('id');
+
+        const response = await axios.get(`http://localhost:8080/api/v1/user/maxAmount/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+        console.log(response.data);
+        setNewMaxAmount(response.data);
+      } catch (error) {
+        console.error('Error fetching max amount:', error);
+      }
+    };
+
+    fetchMaxAmount();
+  }, []);
+  useEffect(() => {
+    const fetchMontant = async () => {
+      try {
+        const accessToken = localStorage.getItem('accessToken');
+        const userId = localStorage.getItem('id');
+
+        const response = await axios.get(`http://localhost:8080/api/v1/user/montant/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+        console.log(response.data);
+        setMontant(response.data);
+      } catch (error) {
+        console.error('Error fetching max amount:', error);
+      }
+    };
+
+    fetchMontant();
+  }, []);
+
+  
   const [totalCostPurchases, setTotalCostPurchases] = useState<number>(500);
-
   const storedName = localStorage.getItem('firstname');
-  const [name, setName] = useState(storedName !== null ? storedName : '');
-  
-  // ... rest of your component code
-  
+  const storedId = localStorage.getItem('id');
+  const [name, setName] = useState<string>(storedName !== null ? storedName : '');
 
-  // Calculate the progress percentage
-  const progressPercentage = (totalCostPurchases / creditLimit) * 100;
+  if (newMaxAmount === null) {
+    // Loading state or handle it as appropriate
+    return <div>Loading...</div>;
+  }
+   // Add a check for newMaxAmount
+   const progressPercentage = newMaxAmount ? ((montant ?? 0) / Number(newMaxAmount)) * 100 : 0;
 
-  // Define a color scale
+  // Add a check for newMaxAmount
+
   const colorScale = [
     { percentage: 0, color: 'limegreen' },
     { percentage: 50, color: 'green' },
@@ -24,18 +73,16 @@ const CreditAppPage: React.FC = () => {
     { percentage: 100, color: 'red' },
   ];
 
-  // Find the color based on the progress percentage
   const getColor = () => {
     for (const { percentage, color } of colorScale) {
       if (progressPercentage <= percentage) {
         return color;
       }
     }
-    return 'red'; // Default color if percentage exceeds the defined scale
+    return 'red';
   };
 
   return (
-
     <div className="min-h-screen grid grid-cols-2 gap-4 items-center justify-center bg-gray-100 max-h-1500-px">
       <div className="pr-4">
         <p className="text-carribean font-semibold text-5xl pl-10 p-6">Welcome {name}</p>
@@ -53,7 +100,7 @@ const CreditAppPage: React.FC = () => {
             <div className="flex mb-2 items-center justify-between">
               <div>
                 <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-black " style={{ backgroundColor: getColor(), }}>
-                  {`${totalCostPurchases} / ${creditLimit} DT`}
+                  {`${montant} / ${newMaxAmount} DT`}
                 </span>
               </div>
               <div className="text-right">
@@ -85,10 +132,9 @@ const CreditAppPage: React.FC = () => {
 
         {/* Example button */}
         <button
-          className="bg-orange text-carribean px-4 py-2 rounded-xl "
+          className="bg-[#0077b6] text-gray-100 px-4 py-2  rounded-xl "
           onClick={() => {
-            // Add logic to update totalCostPurchases
-            setTotalCostPurchases(970.5);
+            navigate('/user/editMax');
           }}
         >
           Change Limit Amount
@@ -99,4 +145,3 @@ const CreditAppPage: React.FC = () => {
 };
 
 export default CreditAppPage;
-

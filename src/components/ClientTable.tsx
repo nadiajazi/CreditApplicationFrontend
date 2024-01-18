@@ -11,7 +11,7 @@ const ClientTable  = () => {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const { clients, selectClient } = useClientStore();
   const filteredClients = clients.filter((client) =>
-  client.name.toLowerCase().includes(searchQuery.toLowerCase())
+  client.firstName.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const navigate = useNavigate();
@@ -19,6 +19,8 @@ const ClientTable  = () => {
   const handleSelectClient = (client: Client) => {
     selectClient(client);
     navigate('/admin/clients/form'); 
+    console.log(client.id)
+     localStorage.setItem('id2',String(client.id))
   };
 
   
@@ -27,13 +29,14 @@ const ClientTable  = () => {
   const removeClient = useClientStore((state) => state.removeClient);
 
     
-  const handleDelete = (clientId: number) => {
+  const handleDelete = (clientId: number, event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation()
       removeClient(clientId);
   };
   return (
     
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <div className="pb-4 bg-white">
+        <div className="pb-4 bg-white mb-5" >
           <label htmlFor="table-search" className="sr-only">
           Search
           </label>
@@ -65,20 +68,28 @@ const ClientTable  = () => {
           />
         </div>
       </div>
-      <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+      <table className="w-full text-sm text-left rtl:text-right text-gray-900 dark:text-gray-400">
       <thead>
           <tr >
             <th scope="col" className="px-6 py-3">
-              Name
+              Firstname
+            </th>
+            <th scope="col" className="px-6 py-3">
+              Lastname
             </th>
             <th scope="col" className="px-6 py-3">
               Email
             </th>
             <th scope="col" className="px-6 py-3">
-              Address
+              Montant
             </th>
+            
             <th scope="col" className="px-6 py-3">
-              Total amount
+              Max Amount
+            </th>
+           
+            <th scope="col" className="px-6 py-3">
+              Role
             </th>
             <th scope="col" className="px-6 py-3">
               Action
@@ -90,14 +101,16 @@ const ClientTable  = () => {
                 <tr
                 onClick={() => handleSelectClient(client)}
                 key={client.id}
-                className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-900"
+                className="bg-white border-b  dark:border-gray-700 cursor-pointer  "
                 >   
-                <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                  {client.name}
+                <td className="px-6 py-4 font-medium text-black whitespace-nowrap ">
+                  {client.firstName}
                 </td>
+                <td className="px-6 py-4">{client.lastName}</td>
                 <td className="px-6 py-4">{client.email}</td>
-                <td className="px-6 py-4">{client.address.city}</td>
-                <td className="px-6 py-4">{client.totalAmount.toFixed(3) } TND</td>
+                <td className="px-6 py-4">{client.montant.toFixed(3) } TND</td>
+                <td className="px-6 py-4">{client.maxAmount.toFixed(3) } TND</td>
+                <td className="px-6 py-4">{client.role}</td>
                 <td className="px-6 py-4 flex-direction-row">
                       <div className="flex items-center">
                         <Link to={`/admin/clients/form/${client.id}`}>
@@ -105,8 +118,8 @@ const ClientTable  = () => {
                         </Link>
 
                         <button
-                            className="text-red-500 hover:text-red-700 mr-2"
-                            onClick={() => handleDelete(client.id)}
+                            className="text-red-500 hover:text-red-700 ml-5"
+                            onClick={(event) => handleDelete(client.id, event)}
                         >
                             <FaTrash />
                     </button>                      

@@ -47,7 +47,7 @@ function NavListMenu() {
             {" "}
             {React.createElement(icon, {
               strokeWidth: 2,
-              className: "h-6 text-orange-500 w-6",
+              className: "h-6 text-gray-100 w-6",
             })}
           </div>
           <div>
@@ -82,7 +82,7 @@ function NavListMenu() {
         <MenuHandler>
           <Typography as="div" variant="small" className="font-medium">
             <ListItem
-              className="flex items-center gap-2 py-2 pr-4 font-medium text-orange-500"
+              className="flex items-center gap-2 py-2 pr-4 font-medium text-gray-100"
               selected={isMenuOpen || isMobileMenuOpen}
               onClick={() => setIsMobileMenuOpen((cur) => !cur)}
             >
@@ -121,27 +121,17 @@ function NavList() {
         as="a"
         href="/client/dashboard"
         variant="small"
-        color="orange"
+        color="gray"
         className="font-medium"
         
       >
         
-        <ListItem className="flex items-center gap-2 py-2 pr-4">
+        <ListItem className="flex text-gray-100 items-center gap-2 py-2 pr-4">
           Your Dashboard
         </ListItem>
       </Typography>
       <NavListMenu />
-      <Typography
-        as="a"
-        href="/Contact"
-        variant="small"
-        color="orange"
-        className="font-medium"
-      >
-        <ListItem className="flex items-center gap-2 py-2 pr-4">
-          Contact Us
-        </ListItem>
-      </Typography>
+    
     </List>
   );
 }
@@ -177,21 +167,21 @@ export function NavbarWithMegaMenu() {
   }
   return (
     <div className="fixed mb-16 w-full z-50 rounded-xs ">
-      <Navbar className="mx-auto max-w-full bg-carribean px-4 py-2 z-10">
-        <div className="flex items-center justify-between text-orange-500">
+      <Navbar className="mx-auto max-w-full bg-[#82c0cc] px-4 py-2 z-10">
+        <div className="flex items-center justify-between text-gray-100">
           <Typography
             as="a"
             href="#"
             variant="h6"
             className="mr-4 cursor-pointer py-1.5 lg:ml-2"
           >
-            Logo
+            Your profile
           </Typography>
           <div className="hidden lg:block">
             <NavList />
           </div>
 
-          <div className="hidden gap-2 lg:flex bg-orange rounded-md">
+          <div className="hidden gap-2 lg:flex bg-[#d4a373] rounded-md">
 
             <Button size="sm" onClick={handleClick}>
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8">

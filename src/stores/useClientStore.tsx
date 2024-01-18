@@ -1,18 +1,22 @@
 import { create } from "zustand";
-import apiClient, { setAuthToken } from '../utils/apiClient';
+
 export interface Address {
   city: string;
 }
 
 export interface User {
   id: number;
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
-  address: Address;
+  role: string;
+  montant: number;
+  maxAmount: number;
+
 }
 
 export interface Client extends User {
-  totalAmount: number;
+ 
 }
 
 interface State {
@@ -22,13 +26,12 @@ interface State {
   totalClients: number;
   isLoading: boolean;
   error: any;
-  token: string;
 }
 
 interface Actions {
   fetchData: () => Promise<void>;
   removeClient: (clientId: number) => void;
-  updateTotalAmount: (clientId: number, transactionAmount: number) => void;
+  updatemontant: (clientId: number, transactionAmount: number) => void;
 }
 
 const INITIAL_STATE: State = {
@@ -37,43 +40,75 @@ const INITIAL_STATE: State = {
   totalClients: 0,
   isLoading: false,
   error: null,
-  token: '',
-  selectClient: () => {}, 
+  selectClient: () => { }, // Temporary placeholder, will be overwritten
 };
 
-export const useClientStore = create<State & Actions>((set,get) => ({
+
+export const useClientStore = create<State & Actions>((set) => ({
+
   ...INITIAL_STATE,
   selectClient: (client) => set({ selectedClient: client }),
-
+  
   fetchData: async () => {
     set({ isLoading: true, error: null });
     try {
-      const token = get().token; 
-      setAuthToken(token); 
-      const response = await apiClient.get("/api/v1/users");
-      const clientsWithTotalAmount: Client[] = response.data.map((client: User) => ({
-        ...client,
-        totalAmount: 0,
+      const accessToken = localStorage.getItem("accessToken");
+  
+      const response = await fetch("http://localhost:8080/api/v1/management/users", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+  
+      const data: User[] = await response.json();
+      const clientsWithMontant: Client[] = data.map((user) => ({
+        ...user,
+        montant: user.montant, // Set an initial value for montant
+        maxAmount: user.maxAmount,   // Set an initial value for maxAmount
       }));
-
-      set({ clients: clientsWithTotalAmount, totalClients: response.data.length, isLoading: false });
+  
+      set({ clients: clientsWithMontant, totalClients: clientsWithMontant.length, isLoading: false });
     } catch (error) {
       console.error("Error fetching data:", error);
       set({ error, isLoading: false });
     }
   },
+  
+  removeClient: async (clientId: number) => {
+    try {
+      const accessToken = localStorage.getItem('accessToken');
+      const response = await fetch(`http://localhost:8080/api/v1/management/user/${clientId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      console.log(clientId)
 
-  removeClient: (clientId: number) =>
-    set((state) => ({
-      clients: state.clients.filter((client) => client.id !== clientId),
-      totalClients: state.totalClients - 1
-    })),
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
 
-  updateTotalAmount: (clientId, transactionAmount) =>
+      // If API request is successful, update the state
+      set((state) => ({
+        clients: state.clients.filter((client) => client.id !== clientId),
+        totalClients: state.totalClients - 1,
+      }));
+    } catch (error) {
+      console.error('Error deleting user:', error);
+    }
+  },
+
+  updatemontant: (clientId, transactionAmount) =>
     set((state) => ({
       clients: state.clients.map((client) =>
         client.id === clientId
-          ? { ...client, totalAmount: client.totalAmount + transactionAmount }
+          ? { ...client, montant: client.montant + transactionAmount }
           : client
       ),
     })),

@@ -1,15 +1,15 @@
 import { useProductStore } from '../stores/useProductStore';
 
-export const fetchPriceFromDatabase = async (productTitle: string): Promise<number> => {
+export const fetchPriceFromDatabase = async (productname: string): Promise<number> => {
     const products = useProductStore.getState().products;
     const matchingProduct = products.find((product) =>
-      product.title.trim().toLowerCase() === productTitle.trim().toLowerCase()
+      product.name.trim().toLowerCase() === productname.trim().toLowerCase()
     );
   
     if (matchingProduct) {
       return matchingProduct.price;
     } else {
-      console.error(`Product with title "${productTitle}" not found in the database.`);
+      console.error(`Product with name "${productname}" not found in the database.`);
       return 0;
     }
   };

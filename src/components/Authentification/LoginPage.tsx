@@ -89,6 +89,11 @@ const redirectUser =(role: any)=>{
       localStorage.setItem('accessToken', data.accessToken);
       localStorage.setItem('refreshToken', data.refreshToken);
       localStorage.setItem('firstname', data.firstName);
+      localStorage.setItem('id', data.id);
+      console.log('id', data.id);
+      localStorage.setItem('maxAmount', data.montant);
+
+
 
       toast.success("Success");
       
@@ -197,7 +202,7 @@ const handleClick = () => {
 
 
 
-  )
+  );
 
   
-}
+};

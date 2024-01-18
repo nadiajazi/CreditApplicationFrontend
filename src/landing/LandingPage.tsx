@@ -30,8 +30,7 @@ const LandingPage: React.FC = () => {
         <img src={illustration} alt="Illustration" className="w-full h-full object-cover" />
       </div>
     </div>
-  );
+  )
 };
 
 export default LandingPage;
-
