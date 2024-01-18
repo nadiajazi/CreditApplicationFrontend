@@ -10,6 +10,7 @@ export interface Transaction {
   product: Product;
   price: number;
   purchaseName: string;
+  purchaseDate: any;
 
 }
 

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useTransactionStore, Transaction } from '../stores/useTransactionStore';
-import { FaTrash } from 'react-icons/fa';
+
 
 interface TransactionTableProps {
   transactions: Transaction[];
@@ -21,6 +21,10 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ label, options }) =
     fetchAdminPurchases();
   }, [fetchAdminPurchases]);
 
+
+  const formatDate = (date: Date): string => {
+    return date.toISOString().slice(0, 16).replace('T', ' ');
+  };
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -38,9 +42,6 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ label, options }) =
             <th scope="col" className="px-6 py-3">
               Quantity
             </th>
-            <th scope="col" className="px-6 py-3">
-              Action
-            </th>
           </tr>
         </thead>
         <tbody>
@@ -53,18 +54,13 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ label, options }) =
                 {transaction.purchaseName}
               </td>
               <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
-              {transaction.product.purchaseDate.toString() }
+              {formatDate(new Date(transaction.purchaseDate))}
               </td> 
               <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
                 ${transaction.amount}
               </td>
               <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
                 {transaction.quantity}
-              </td>
-              <td className="px-6 py-4">
-                <button>
-                  <FaTrash />
-                </button>
               </td>
             </tr>
           ))}

@@ -1,7 +1,11 @@
 import React, { ChangeEvent, useState, useEffect } from 'react';
+import {useNavigate} from 'react-router-dom';
 import axios from 'axios';
 
 export default function EditMax() {
+
+
+  const navigate = useNavigate();
   const [newMaxAmount, setNewMaxAmount] = useState('');
   const [error, setError] = useState<string | null>(null);
 
@@ -48,6 +52,8 @@ export default function EditMax() {
 
       setError(null); // Reset the error state if the update is successful
       console.log('Max Amount updated successfully');
+      navigate(`/client/dashboard`)
+      
     } catch (error) {
       console.error('Error updating max amount:', error);
       setError('Error updating max amount');
@@ -65,6 +71,7 @@ export default function EditMax() {
       />
       <button
         onClick={handleSubmit}
+        
         className="bg-green-500 text-white px-4 py-2 border-none rounded cursor-pointer text-xl"
       >
         Submit

@@ -142,7 +142,7 @@ export default function AddProducts() {
                 onChange={(e) => onInputChange(e)}
               />
             </div>
-            <button type="submit" className="bg-[#036FE6] text-white p-2 rounded-md">
+            <button type="submit" className="bg-[#82c0cc] text-white p-2 rounded-md">
               Submit
             </button>
             <Link className="bg-red-500 text-white p-2 rounded-md mx-2" to="/admin/products">

@@ -8,6 +8,7 @@ const CreditAppPage: React.FC = () => {
   const navigate = useNavigate();
 
   const [newMaxAmount, setNewMaxAmount] = useState<number | null>(null);
+  const [montant, setMontant] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchMaxAmount = async () => {
@@ -29,7 +30,28 @@ const CreditAppPage: React.FC = () => {
 
     fetchMaxAmount();
   }, []);
+  useEffect(() => {
+    const fetchMontant = async () => {
+      try {
+        const accessToken = localStorage.getItem('accessToken');
+        const userId = localStorage.getItem('id');
 
+        const response = await axios.get(`http://localhost:8080/api/v1/user/montant/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+        console.log(response.data);
+        setMontant(response.data);
+      } catch (error) {
+        console.error('Error fetching max amount:', error);
+      }
+    };
+
+    fetchMontant();
+  }, []);
+
+  
   const [totalCostPurchases, setTotalCostPurchases] = useState<number>(500);
   const storedName = localStorage.getItem('firstname');
   const storedId = localStorage.getItem('id');
@@ -39,9 +61,10 @@ const CreditAppPage: React.FC = () => {
     // Loading state or handle it as appropriate
     return <div>Loading...</div>;
   }
+   // Add a check for newMaxAmount
+   const progressPercentage = newMaxAmount ? ((montant ?? 0) / Number(newMaxAmount)) * 100 : 0;
 
   // Add a check for newMaxAmount
-  const progressPercentage = newMaxAmount ? (totalCostPurchases / Number(newMaxAmount)) * 100 : 0;
 
   const colorScale = [
     { percentage: 0, color: 'limegreen' },
@@ -77,7 +100,7 @@ const CreditAppPage: React.FC = () => {
             <div className="flex mb-2 items-center justify-between">
               <div>
                 <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-black " style={{ backgroundColor: getColor(), }}>
-                  {`${totalCostPurchases} / ${newMaxAmount} DT`}
+                  {`${montant} / ${newMaxAmount} DT`}
                 </span>
               </div>
               <div className="text-right">
@@ -109,7 +132,7 @@ const CreditAppPage: React.FC = () => {
 
         {/* Example button */}
         <button
-          className="bg-orange text-carribean px-4 py-2 rounded-xl "
+          className="bg-[#0077b6] text-gray-100 px-4 py-2  rounded-xl "
           onClick={() => {
             navigate('/user/editMax');
           }}

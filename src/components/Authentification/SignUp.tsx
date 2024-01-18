@@ -73,7 +73,7 @@ export default function SignUp() {
   const redirectUser = () => {
     return setTimeout(() => {
       window.location.pathname = ('/login')
-    }, 5000);
+    }, 2000);
 
   }
   const validateField = (field: string | null, fieldName: string) => {

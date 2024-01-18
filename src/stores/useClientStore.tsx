@@ -88,6 +88,7 @@ export const useClientStore = create<State & Actions>((set) => ({
           Authorization: `Bearer ${accessToken}`,
         },
       });
+      console.log(clientId)
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
