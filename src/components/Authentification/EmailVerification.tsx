@@ -1,5 +1,5 @@
 import React from 'react';
-import COVER_IMAGE from '../../assets/Idea_1.jpg';
+import COVER_IMAGE from '../../assets/Payment.png';
 import { useNavigate } from 'react-router-dom';
 
 function EmailVerification() {
@@ -22,7 +22,7 @@ function EmailVerification() {
             Enter the code below to confirm your email address
           </p>
         </div>
-
+       
         <div className="w-full flex flex-col space-y-3 items-center">
           <div className="grid grid-cols-6 gap-2">
             {[1, 2, 3, 4, 5, 6].map((_, index) => (
