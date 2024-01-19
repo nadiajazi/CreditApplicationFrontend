@@ -1,12 +1,25 @@
 import React from 'react';
 import { NavbarWithMegaMenu } from './Layout/NavList';
+import payment_image from '../assets/pay.jpg'
+
 
 const PaymentPage = () => {
   return (
     <div>
       <NavbarWithMegaMenu></NavbarWithMegaMenu>
-      <div className='container px-40 py-40 mx-auto'>
-      <section className=" max-w-md mx-auto p-6 bg-white rounded-md shadow-md">
+      <div className='container px-40 py-40 mx-auto flex justify-center items-center'>
+
+
+        
+        <div className="w-1/2 pr-8">
+            {/* Illustration */}
+            <img
+              src={payment_image}  
+              alt="No purchases illustration"
+              className="w-full h-full object-cover"
+            />
+          </div>
+        <section className="w-1/2 max-w-xl mx-auto p-6 bg-white rounded-md shadow-md">
         <h2 className="text-2xl font-semibold mb-6 text-orange">Payment Information</h2>
 
         {/* Credit Card Number */}
@@ -41,7 +54,7 @@ const PaymentPage = () => {
 
         {/* Submit Button */}
         <button
-          className="bg-skyblue text-white py-2 px-4 rounded-md hover:bg-green-600 focus:outline-none focus:shadow-outline-blue"
+          className="bg-[#7C9EB9] text-white py-2 px-4 rounded-md hover:bg-[#F0BFA5] focus:outline-none focus:shadow-outline-blue"
           type="button"
         >
           Submit Payment

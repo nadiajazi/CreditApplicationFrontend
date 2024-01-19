@@ -127,7 +127,7 @@ function NavList() {
       >
         
         <ListItem className="flex text-gray-100 items-center gap-2 py-2 pr-4">
-          Your Dashboard
+          Home
         </ListItem>
       </Typography>
       <NavListMenu />
@@ -167,7 +167,7 @@ export function NavbarWithMegaMenu() {
   }
   return (
     <div className="fixed mb-16 w-full z-50 rounded-xs ">
-      <Navbar className="mx-auto max-w-full bg-[#82c0cc] px-4 py-2 z-10">
+      <Navbar className="mx-auto max-w-full bg-[#94CCF9] px-4 py-2 z-10">
         <div className="flex items-center justify-between text-gray-100">
           <Typography
             as="a"
@@ -181,7 +181,7 @@ export function NavbarWithMegaMenu() {
             <NavList />
           </div>
 
-          <div className="hidden gap-2 lg:flex bg-[#d4a373] rounded-md">
+          <div className="hidden gap-2 lg:flex bg-[#F0BFA5] rounded-md">
 
             <Button size="sm" onClick={handleClick}>
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8">

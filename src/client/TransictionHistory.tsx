@@ -24,7 +24,7 @@ const TransactionHistory = () => {
       <div className="container px-40 py-40 mx-auto">
       {clientPurchases && clientPurchases.length > 0 ? (
         <table className="min-w-full bg-white border rounded-lg overflow-hidden">
-          <thead className="bg-[#e07a5f] text-white">
+          <thead className="bg-[#94CCF9] text-white">
             <tr>
               <th className="py-2 px-4 border-b">Name</th>
               <th className="py-2 px-4 border-b">Quantity</th>

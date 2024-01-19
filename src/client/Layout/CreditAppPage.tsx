@@ -3,6 +3,13 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 // ... (import statements)
+import backgroundImage from '../../assets/cover.png'; // Replace with the actual path to your image file
+
+const pageStyle: React.CSSProperties = {
+  backgroundImage: `url(${backgroundImage})`,
+  backgroundSize: 'cover',
+  backgroundPosition: 'center',
+};
 
 const CreditAppPage: React.FC = () => {
   const navigate = useNavigate();
@@ -83,15 +90,15 @@ const CreditAppPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen grid grid-cols-2 gap-4 items-center justify-center bg-gray-100 max-h-1500-px">
+    <div className="min-h-screen grid grid-cols-2 gap-4 items-center justify-center bg-gray-100 max-h-1500-px" style={pageStyle}>
       <div className="pr-4">
-        <p className="text-carribean font-semibold text-5xl pl-10 p-6">Welcome {name}</p>
-        <p className="text-black text-2xl p-10 ">
+        <p className="text-black font-semibold text-5xl pl-10 p-6">Hello {name} !</p>
+        <p className="text-black text-2xl p-10 bg-white bg-opacity-50 rounded-lg ml-5 mb-6 shadow-md ">
           Welcome to the credit app! We're delighted to have you on board. Here's some essential information about your credit limit: manage your spending wisely and keep track of your total cost purchases.
         </p>
       </div>
-      <div className="max-w-md w-full bg-white p-6 rounded-lg shadow-md">
-        <h2 className="text-3xl font-semibold mb-4 text-carribean">Credit Limit</h2>
+      <div className="max-w-md w-full bg-white p-6 rounded-lg shadow-md ml-6">
+        <h2 className="text-3xl font-semibold mb-4 text-black">Credit Limit</h2>
 
         {/* Progress Widget */}
         <div className="mb-4">
