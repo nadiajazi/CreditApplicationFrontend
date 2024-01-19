@@ -1,5 +1,6 @@
 import React, {useEffect} from 'react';
 import { NavbarWithMegaMenu } from './Layout/NavList';
+import error_image from '../assets/404.png'
 import { useTransactionStore } from '../stores/useTransactionStore';
 
 
@@ -21,6 +22,7 @@ const TransactionHistory = () => {
     <div>
       <NavbarWithMegaMenu></NavbarWithMegaMenu>
       <div className="container px-40 py-40 mx-auto">
+      {clientPurchases && clientPurchases.length > 0 ? (
         <table className="min-w-full bg-white border rounded-lg overflow-hidden">
           <thead className="bg-[#e07a5f] text-white">
             <tr>
@@ -41,6 +43,18 @@ const TransactionHistory = () => {
             ))}
           </tbody>
         </table>
+        ) : (
+          <div className="flex flex-col items-center justify-center">
+            {/* Illustration */}
+            <img
+              src={error_image}  
+              alt="No purchases illustration"
+              className="w-1/2 h-1/2 object-cover"
+            />
+            {/* Message */}
+            <p className="mt-4 text-5xl text-blue-600 font-serif font-semibold">You have no purchases yet!</p>
+          </div>
+        )}
       </div>
     </div>
   );
