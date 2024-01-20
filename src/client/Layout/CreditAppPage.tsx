@@ -1,14 +1,14 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-// ... (import statements)
-import backgroundImage from '../../assets/cover.png'; // Replace with the actual path to your image file
+import EditMax from './editMax';
+import backgroundImage from '../../assets/cover.png'; 
 
 const pageStyle: React.CSSProperties = {
-  backgroundImage: `url(${backgroundImage})`,
+  backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url(${backgroundImage})`,
   backgroundSize: 'cover',
   backgroundPosition: 'center',
+  
 };
 
 const CreditAppPage: React.FC = () => {
@@ -16,6 +16,8 @@ const CreditAppPage: React.FC = () => {
 
   const [newMaxAmount, setNewMaxAmount] = useState<number | null>(null);
   const [montant, setMontant] = useState<number | null>(null);
+  const [showEditMaxPopup, setShowEditMaxPopup] = useState(false);
+
 
   useEffect(() => {
     const fetchMaxAmount = async () => {
@@ -89,6 +91,16 @@ const CreditAppPage: React.FC = () => {
     return 'red';
   };
 
+
+
+  // Function to toggle the popup visibility
+  const toggleEditMaxPopup = () => {
+    setShowEditMaxPopup(!showEditMaxPopup);
+  };
+  const closeEditMaxPopup = () => {
+    setShowEditMaxPopup(false);
+  };
+
   return (
     <div className="min-h-screen grid grid-cols-2 gap-4 items-center justify-center bg-gray-100 max-h-1500-px" style={pageStyle}>
       <div className="pr-4">
@@ -140,13 +152,18 @@ const CreditAppPage: React.FC = () => {
         {/* Example button */}
         <button
           className="bg-[#0077b6] text-gray-100 px-4 py-2  rounded-xl "
-          onClick={() => {
-            navigate('/user/editMax');
-          }}
+          onClick={toggleEditMaxPopup}
         >
           Change Limit Amount
         </button>
       </div>
+
+      {showEditMaxPopup && (
+        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
+          {/* Pass the onClose function as a prop */}
+          <EditMax onClose={closeEditMaxPopup} />
+        </div>
+      )}
     </div>
   );
 };

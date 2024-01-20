@@ -1,11 +1,11 @@
-import React, { ChangeEvent, useState, useEffect } from 'react';
-import {useNavigate} from 'react-router-dom';
+import React, { ChangeEvent,useState, useEffect } from 'react';
 import axios from 'axios';
 
-export default function EditMax() {
+interface EditMaxProps {
+  onClose: () => void;
+}
 
-
-  const navigate = useNavigate();
+const EditMax: React.FC<EditMaxProps> = ({ onClose }) => {
   const [newMaxAmount, setNewMaxAmount] = useState('');
   const [error, setError] = useState<string | null>(null);
 
@@ -30,7 +30,7 @@ export default function EditMax() {
 
     fetchMaxAmount();
   }, []);
-
+  
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     setNewMaxAmount(event.target.value);
   };
@@ -52,7 +52,7 @@ export default function EditMax() {
 
       setError(null); // Reset the error state if the update is successful
       console.log('Max Amount updated successfully');
-      navigate(`/client/dashboard`)
+      
       
     } catch (error) {
       console.error('Error updating max amount:', error);
@@ -61,23 +61,40 @@ export default function EditMax() {
   };
 
   return (
-    <div className="flex flex-col items-center mt-20">
-      <input
-        type="number"
-        placeholder="Enter new maximum amount"
-        value={newMaxAmount}
-        onChange={handleInputChange}
-        className="w-64 px-4 py-2 mb-4 text-xl border rounded"
-      />
-      <button
-        onClick={handleSubmit}
-        
-        className="bg-green-500 text-white px-4 py-2 border-none rounded cursor-pointer text-xl"
-      >
-        Submit
-      </button>
+    <div className="bg-white p-8 rounded-lg w-96">
+      <h2 className="text-2xl font-semibold mb-4 text-black">Update Credit Limit</h2>
 
-      {error && <p className="text-red-500">{error}</p>}
+      <form onSubmit={handleSubmit}>
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700">New Credit Limit:</label>
+          <input
+            type="number"
+            className="mt-1 p-2 border rounded w-full"
+            value={newMaxAmount ?? ''}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
+
+        <div className="flex justify-end">
+          <button
+            type="button"
+            className="bg-gray-300 text-gray-800 px-4 py-2 mr-2 rounded"
+            onClick={onClose}
+          >
+            Cancel
+          </button>
+          <button
+            
+            type="submit"
+            className="bg-[#0077b6] text-gray-100 px-4 py-2 rounded"
+          >
+            Update
+          </button>
+        </div>
+      </form>
     </div>
   );
-}
+};
+
+export default EditMax;
