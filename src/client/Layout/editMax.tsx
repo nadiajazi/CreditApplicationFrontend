@@ -60,15 +60,17 @@ const EditMax: React.FC<EditMaxProps> = ({ onClose }) => {
     }
   };
 
+
   const handleOutsideClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    onClose();
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
   };
-  
 
   return (
-    <div className="fixed inset-0 z-50 overflow-auto bg-black bg-opacity-30 flex items-center justify-center"
+    <div className="fixed inset-0 z-50 overflow-auto bg-black bg-opacity-50 flex items-center justify-center"
         onClick={handleOutsideClick}>
-    <div className="bg-white p-8 rounded-lg w-96">
+    <div className="bg-white p-8 rounded-lg w-96  border shadow overflow-y-auto">
       <h2 className="text-2xl font-semibold mb-4 text-black">Update Credit Limit</h2>
 
       <form onSubmit={handleSubmit}>

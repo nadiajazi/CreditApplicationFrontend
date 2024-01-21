@@ -3,6 +3,7 @@ import AdminSideBar from "../components/AdminSideBar";
 import ProductTable from "../components/ProductTable";
 import { useProductStore } from "../stores/useProductStore";
 import EditProduct from "../components/EditProduct";
+import AddProducts from "../components/AddProducts";
 
 
 
@@ -10,6 +11,7 @@ const ProductManagement: React.FC = () => {
   
   const [open, setOpen] = useState(true);
   const [isEditPopupOpen, setEditPopupOpen] = useState(false);
+  const [isAddPopupOpen, setAddPopupOpen] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState<number>(0);
   const { products, isLoading, fetchData } = useProductStore()
 
@@ -24,6 +26,15 @@ const ProductManagement: React.FC = () => {
     setSelectedProductId(0);
   };
 
+  const handleAddClick = () => {
+    setAddPopupOpen(true);
+  };
+
+  const handleAddPopupClose = () => {
+    setAddPopupOpen(false);
+   
+  };
+
   return (
     <section className="flex gap-6">
       <AdminSideBar open={open} toggleSidebar={() => setOpen(!open)} />
@@ -33,7 +44,7 @@ const ProductManagement: React.FC = () => {
         {isLoading 
         ? <div className='text-center text-lg'>Loading...</div> 
           : 
-          <ProductTable products={products} onEditClick={handleEditClick} />
+          <ProductTable products={products} onEditClick={handleEditClick} onAddClick={handleAddClick} />
 
           }          
           </div>
@@ -42,6 +53,12 @@ const ProductManagement: React.FC = () => {
         <EditProduct
           onClose={handleEditPopupClose}
           id={selectedProductId}          
+        />
+      )}
+
+      {isAddPopupOpen && (
+        <AddProducts
+          onClose={handleAddPopupClose}         
         />
       )}
     </section>

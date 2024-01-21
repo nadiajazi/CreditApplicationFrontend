@@ -1,4 +1,4 @@
-import { Link, useNavigate, useParams } from "react-router-dom";
+import {  useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useProductStore } from "../stores/useProductStore";
@@ -11,12 +11,10 @@ interface EditProductProps {
 }
 
 const EditProduct: React.FC<EditProductProps> = ({ onClose, id}) => {
-    let navigate = useNavigate();
     const { productId } = useParams();
     const [accessToken, setAccessToken] = useState<string>("");
     const [refreshToken, setRefreshToken] = useState<string>("");
-    const [apiCallSuccess, setApiCallSuccess] = useState<boolean>(false);
-    const { products, isLoading, fetchData } = useProductStore()
+    const {  fetchData } = useProductStore()
 
     useEffect(() => { fetchData() }, [fetchData])
 
@@ -108,7 +106,6 @@ const EditProduct: React.FC<EditProductProps> = ({ onClose, id}) => {
     const handleCancel = () => {
       console.log("Cancel button clicked");
       onClose();
-
     };
     
 
@@ -133,7 +130,7 @@ const EditProduct: React.FC<EditProductProps> = ({ onClose, id}) => {
           ...response.data,
         }));
     
-        setApiCallSuccess(true);
+      
     
         // Close the modal
         onClose();

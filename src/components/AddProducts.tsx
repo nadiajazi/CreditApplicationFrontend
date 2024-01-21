@@ -1,19 +1,20 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useProductStore } from "../stores/useProductStore";
 
-export default function AddProducts() {
-  const navigate = useNavigate();
+interface AddProductProps {
+  onClose: () => void; 
+}
+const AddProducts: React.FC<AddProductProps> = ({ onClose}) => {
 
-  // State for storing the access token
   const [accessToken, setAccessToken] = useState<string>(""); // Set initial state to an empty string
-
+  const {  fetchData } = useProductStore()
   const [productData, setProductData] = useState({
     name: "",
     quantity: "",
     price: "",
     ref: "",
-    images: "", // Add the imageUrl field
+    images: "", 
 
   });
 
@@ -28,7 +29,10 @@ export default function AddProducts() {
   const onInputChange = (e:any) => {
     setProductData({ ...productData, [e.target.name]: e.target.value });
   };
-
+  const handleCancel = () => {
+    console.log("Cancel button clicked");
+    onClose();
+  };
   const onSubmit = async (e:any) => {
     e.preventDefault();
     try {
@@ -43,16 +47,23 @@ export default function AddProducts() {
       await axios.post("http://localhost:8080/product", productData, config);
 
       console.log(productData);
-      navigate("/admin/products");
+      fetchData(); // Assuming fetchData is a function that fetches the product data
+
     } catch (error) {
       console.error("Error submitting data:", error);
     }
   };
-
+  
+  const handleOutsideClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
   return (
-    <div className="container mx-auto">
+    <div className="fixed inset-0 z-50 overflow-auto bg-black bg-opacity-50 flex items-center justify-center"
+        onClick={handleOutsideClick}>
       <div className="flex justify-center items-center h-screen">
-        <div className="border rounded p-4 mt-2 shadow w-96 " style={{ backgroundColor: '#C8DEFD' }}>
+        <div className="border rounded p-4 mt-2 shadow w-96 bg-white" >
           <h2 className="text-center m-4 text-2xl font-bold">Add Product</h2>
 
           <form onSubmit={(e) => onSubmit(e)}>
@@ -145,12 +156,13 @@ export default function AddProducts() {
             <button type="submit" className="bg-[#82c0cc] text-white p-2 rounded-md">
               Submit
             </button>
-            <Link className="bg-red-500 text-white p-2 rounded-md mx-2" to="/admin/products">
-              Cancel
-            </Link>
+            <button onClick={handleCancel}>Cancel</button>
+             
           </form>
         </div>
       </div>
-    </div>
+    
+    </div>
   );
 }
+export default AddProducts;

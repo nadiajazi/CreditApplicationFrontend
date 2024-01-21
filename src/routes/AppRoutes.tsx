@@ -31,7 +31,6 @@ const AppRoutes: React.FC = () => {
         <Route path="/admin/clients" element={<AdminClientManagement />} />
         <Route path="/admin/transaction" element={<TransactionManagement />} /> 
         <Route path="/admin/products" element={<ProductManagement />} />
-        <Route path="/admin/Allproduct" element={<AddProducts />} />
         
         <Route
           path="/admin/clients/form"

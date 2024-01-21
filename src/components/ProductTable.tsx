@@ -2,16 +2,16 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { FaTrash, FaEdit } from 'react-icons/fa';
 import { useProductStore, Product } from '../stores/useProductStore';
-import { useNavigate } from 'react-router-dom';
 
 
 interface ProductTableProps {
     products: Product[];
     onEditClick :(id: number) => void;
+    onAddClick : () => void;
   }
 
 
-  const ProductTable: React.FC<ProductTableProps> = ({onEditClick })  => {
+  const ProductTable: React.FC<ProductTableProps> = ({onEditClick, onAddClick })  => {
     const [searchQuery, setSearchQuery] = useState<string>('');
       const products = useProductStore ((state) => state.products);
   
@@ -22,10 +22,7 @@ interface ProductTableProps {
         product.name.toLowerCase().includes(searchQuery.toLowerCase())
       );
       
-      const navigate = useNavigate();
-      const handleGetAddClick = () => {
-        navigate('/admin/Allproduct');
-      };
+     
        
         const onHandle = (productId: number, newQuantity: number) => {
           if (newQuantity > 0) {
@@ -81,7 +78,7 @@ interface ProductTableProps {
   <div className="col-span-2 sm:col-span-1">
     <button
       className="bg-[#82c0cc] text-white p-2 rounded-md w-full"
-      onClick={handleGetAddClick}
+      onClick={() => onAddClick()}
     >
       Add Product
     </button>

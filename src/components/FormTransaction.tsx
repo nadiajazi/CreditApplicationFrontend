@@ -10,9 +10,25 @@ const FormTransaction: React.FC<TransactionProps> = ({ clientId }) => {
   const [name, setname] = useState<string>("");
   const [quantity, setQuantity] = useState<number>(1);
   const addPurchase = useTransactionStore((state) => state.addPurchase);
-  const adminPurchases = useTransactionStore((state) => state.adminPurchases);
+  
 
   const navigate = useNavigate();
+
+  const iduser = localStorage.getItem('id2');
+
+  const {
+    
+    adminPurchases,
+    fetchAdminPurchases,
+  } = useTransactionStore((state) => ({
+    
+    adminPurchases: state.adminPurchases?.filter((purchase) => purchase.userId === Number(iduser)) || [],
+    fetchAdminPurchases: state.fetchAdminPurchases,
+  }));
+
+  useEffect(() => {
+    fetchAdminPurchases();
+  }, [fetchAdminPurchases, clientId]);
 
   const handleProductNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setname(e.target.value);
@@ -30,6 +46,7 @@ const FormTransaction: React.FC<TransactionProps> = ({ clientId }) => {
 
     setname('');
     setQuantity(1);
+    fetchAdminPurchases();
   };
 
   const handleClose = () => {
@@ -41,7 +58,7 @@ const FormTransaction: React.FC<TransactionProps> = ({ clientId }) => {
   };
 
   return (
-    <div className="max-w-md mx-auto p-4 bg-white shadow-md rounded-md">
+    <div className="max-w-md mx-auto mt-8 p-4 bg-white shadow-md rounded-md">
       <h3 className="text-2xl font-semibold mb-4">Add Purchase</h3>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
@@ -106,7 +123,6 @@ const FormTransaction: React.FC<TransactionProps> = ({ clientId }) => {
 
 
 export default FormTransaction;
-
 
 
 
