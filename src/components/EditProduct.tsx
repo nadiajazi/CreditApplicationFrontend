@@ -1,6 +1,8 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useProductStore } from "../stores/useProductStore";
+
 
 interface EditProductProps {
   onClose: () => void; 
@@ -14,6 +16,9 @@ const EditProduct: React.FC<EditProductProps> = ({ onClose, id}) => {
     const [accessToken, setAccessToken] = useState<string>("");
     const [refreshToken, setRefreshToken] = useState<string>("");
     const [apiCallSuccess, setApiCallSuccess] = useState<boolean>(false);
+    const { products, isLoading, fetchData } = useProductStore()
+
+    useEffect(() => { fetchData() }, [fetchData])
 
     const [productData, setProductData] = useState({
       name: "",
@@ -105,11 +110,11 @@ const EditProduct: React.FC<EditProductProps> = ({ onClose, id}) => {
       onClose();
 
     };
+    
+
     const onSubmit = async (e: React.FormEvent) => {
       e.preventDefault();
       try {
-        console.log("Submitting changes...");
-    
         const response = await axios.put(
           `http://localhost:8080/Product/${id}`,
           productData,
@@ -122,12 +127,19 @@ const EditProduct: React.FC<EditProductProps> = ({ onClose, id}) => {
     
         console.log("PUT Response:", response.data);
     
-        // Update the local state with the new product data
-        setProductData(response.data);
+        // Manually update local state by merging changes
+        setProductData((prevData) => ({
+          ...prevData,
+          ...response.data,
+        }));
+    
         setApiCallSuccess(true);
     
         // Close the modal
         onClose();
+    
+        // Automatically reload data after successful submit
+        fetchData(); // Assuming fetchData is a function that fetches the product data
       } catch (error: any) {
         console.error("Error submitting product:", error.message);
     
@@ -136,6 +148,8 @@ const EditProduct: React.FC<EditProductProps> = ({ onClose, id}) => {
         }
       }
     };
+    
+    
     
     
     const handleOutsideClick = (e: React.MouseEvent<HTMLDivElement>) => {
