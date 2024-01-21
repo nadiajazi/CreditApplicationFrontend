@@ -1,19 +1,23 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FaTrash, FaEdit } from 'react-icons/fa';
 import { useProductStore, Product } from '../stores/useProductStore';
-import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
 
 interface ProductTableProps {
     products: Product[];
+    onEditClick :(id: number) => void;
   }
 
 
-  const ProductTable: React.FC<ProductTableProps> = ()  => {
+  const ProductTable: React.FC<ProductTableProps> = ({onEditClick })  => {
     const [searchQuery, setSearchQuery] = useState<string>('');
       const products = useProductStore ((state) => state.products);
+  
+
+      
+
       const filteredProducts = products.filter((product) =>
         product.name.toLowerCase().includes(searchQuery.toLowerCase())
       );
@@ -165,13 +169,10 @@ interface ProductTableProps {
     </button>
 
     {/* Edit Button */}
-    <button>
-      <Link
-        className="btn btn-outline-primary"
-        to={`/admin/EditProduct/${product.id}`}
-      >
+    <button onClick={() => onEditClick(product.id)}>
+      
         <FaEdit />
-      </Link>
+   
     </button>
   </div>
 </td>

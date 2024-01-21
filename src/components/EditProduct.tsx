@@ -1,21 +1,26 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 
+interface EditProductProps {
+  onClose: () => void; 
+  id?: number;
 
+}
 
-export default function EditProduct  ()  {
+const EditProduct: React.FC<EditProductProps> = ({ onClose, id}) => {
     let navigate = useNavigate();
-    const { id } = useParams();
-  
+    const { productId } = useParams();
     const [accessToken, setAccessToken] = useState<string>("");
     const [refreshToken, setRefreshToken] = useState<string>("");
+    const [apiCallSuccess, setApiCallSuccess] = useState<boolean>(false);
+
     const [productData, setProductData] = useState({
       name: "",
       quantity: "",
       price: "",
       ref: "",
-      images: "", // Add the imageUrl field
+      images: "", 
   
     });
   
@@ -37,34 +42,10 @@ export default function EditProduct  ()  {
         setRefreshToken(storedRefreshToken);
       }
     
-      // Check if id is valid before making the request
-      if (id) {
-        loadProduct();
-      }
-    }, []);
-    const loadProduct = async () => {
-      try {
-        const storedAccessToken = localStorage.getItem("accessToken");
-        const result = await axios.get(`http://localhost:8080/Product/${id}`, {
-          headers: {
-            Authorization:` Bearer ${storedAccessToken}`,
-          },
-        });
-        console.log(id)
-        console.log("Product Data:", result.data);
-        setProductData(result.data);
-      } catch (error: any) {
-        if (error.response && error.response.status === 401) {
-          console.error("Token expired, refreshing tokens...");
-          await refreshTokens();
-          // Retry the loadProduct function after refreshing tokens
-          await loadProduct();
-        } else {
-          console.error("Error loading product:", error.message);
-        }
-      }
-    };
-    
+      
+    }, [id]);
+
+   
     
   
     const refreshTokens = async () => {
@@ -74,7 +55,6 @@ export default function EditProduct  ()  {
           { refreshToken },
           {
             headers: {
-              // Include any necessary headers for refreshing tokens
             },
           }
         );
@@ -88,28 +68,85 @@ export default function EditProduct  ()  {
       }
     };
   
+    
+   
+    
+    useEffect(() => {
+      const loadProduct = async () => {
+        try {
+          const storedAccessToken = localStorage.getItem("accessToken");
+          const result = await axios.get(`http://localhost:8080/Product/${id}`, {
+            headers: {
+              Authorization: `Bearer ${storedAccessToken}`,
+            },
+          });
+          console.log(id);
+          console.log("Product Data:", result.data);
+          setProductData(result.data);
+        } catch (error: any) {
+          if (error.response && error.response.status === 401) {
+            console.error("Token expired, refreshing tokens...");
+            await refreshTokens();
+            await loadProduct();
+          } else {
+            console.error("Error loading product:", error.message);
+          }
+        }
+      };
+      if (id) {
+        loadProduct();
+      }
+    }, [id]);
+    
+    
+  
+    const handleCancel = () => {
+      console.log("Cancel button clicked");
+      onClose();
+
+    };
     const onSubmit = async (e: React.FormEvent) => {
       e.preventDefault();
       try {
-        await axios.put(`http://localhost:8080/Product/${id}`, productData, {
-          headers: {
-            Authorization:` Bearer ${accessToken}`,
-          },
-        });
-        navigate("/admin/products");
+        console.log("Submitting changes...");
+    
+        const response = await axios.put(
+          `http://localhost:8080/Product/${id}`,
+          productData,
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+    
+        console.log("PUT Response:", response.data);
+    
+        // Update the local state with the new product data
+        setProductData(response.data);
+        setApiCallSuccess(true);
+    
+        // Close the modal
+        onClose();
       } catch (error: any) {
+        console.error("Error submitting product:", error.message);
+    
         if (error.response && error.response.status === 401) {
           console.error("Token expired, handle refresh logic here");
-        } else {
-          console.error("Error submitting product:", error.message);
         }
       }
     };
-  
+    
+    
+    const handleOutsideClick = (e: React.MouseEvent<HTMLDivElement>) => {
+      if (e.target === e.currentTarget) {
+        onClose();
+      }
+    };
     return (
-      <div className="container mx-auto">
-        <div className="flex justify-center items-center h-screen">
-          <div className="border rounded p-4 mt-2 shadow w-96">
+      <div className="fixed inset-0 z-50 overflow-auto bg-black bg-opacity-50 flex items-center justify-center"
+        onClick={handleOutsideClick}>
+        <div className="bg-white p-6 border rounded-md max-w-2xl w-full h-full shadow overflow-y-auto">
             <h2 className="text-center m-4 text-2xl font-bold">Edit Product</h2>
   
             <form onSubmit={(e) => onSubmit(e)}>
@@ -133,8 +170,8 @@ export default function EditProduct  ()  {
                   <img
                     src={images}
                     alt="Product Preview"
-                    className="mt-1 p-2 border rounded-md max-w-full"
-                  />
+                    className="mt-1 p-2 border rounded-md max-w-xs max-h-100 object-contain"
+                    />
                 </div>
               )}
   
@@ -192,15 +229,18 @@ export default function EditProduct  ()  {
               </div>
               <button type="submit" className="bg-blue-500 text-white p-2 rounded-md">
                 Submit
+              </button >
+              <button
+                className="bg-red-500 text-white p-2 rounded-md mx-2"
+                onClick={handleCancel}
+              >
+                  Cancel
               </button>
-              <Link className="bg-red-500 text-white p-2 rounded-md mx-2" to="/admin/products">
-                Cancel
-              </Link>
-           
-         
             </form>
-          </div>
+          
         </div>
       </div>
     );
   }
+
+  export default EditProduct;

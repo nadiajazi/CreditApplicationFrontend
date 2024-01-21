@@ -1,6 +1,5 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import EditMax from './editMax';
 import backgroundImage from '../../assets/cover.png'; 
 
@@ -12,7 +11,6 @@ const pageStyle: React.CSSProperties = {
 };
 
 const CreditAppPage: React.FC = () => {
-  const navigate = useNavigate();
 
   const [newMaxAmount, setNewMaxAmount] = useState<number | null>(null);
   const [montant, setMontant] = useState<number | null>(null);
@@ -60,10 +58,7 @@ const CreditAppPage: React.FC = () => {
     fetchMontant();
   }, []);
 
-  
-  const [totalCostPurchases, setTotalCostPurchases] = useState<number>(500);
   const storedName = localStorage.getItem('firstname');
-  const storedId = localStorage.getItem('id');
   const [name, setName] = useState<string>(storedName !== null ? storedName : '');
 
   if (newMaxAmount === null) {
