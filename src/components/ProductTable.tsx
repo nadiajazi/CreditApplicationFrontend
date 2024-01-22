@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { FaTrash, FaEdit } from 'react-icons/fa';
 import { useProductStore, Product } from '../stores/useProductStore';
 
@@ -173,8 +173,6 @@ interface ProductTableProps {
     </button>
   </div>
 </td>
-
-                 
                 </tr>
               ))}
             </tbody>

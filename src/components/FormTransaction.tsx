@@ -2,6 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useTransactionStore } from '../stores/useTransactionStore';
 import { useNavigate } from 'react-router-dom';
 import { fetchPriceFromDatabase } from '../services/FetchPriceFromDataBase';
+import { fetchImageFromDatabase } from '../services/FetchImageFromDataBase';
+
+
+
 
 interface TransactionProps {
   clientId: number;
@@ -31,7 +35,8 @@ const FormTransaction: React.FC<TransactionProps> = ({ clientId }) => {
 
   const handleAddItem = async () => {
     const price = await fetchPriceFromDatabase(name);
-    const newPurchase = { name, quantity, total: quantity * price, price };
+    const images = await fetchImageFromDatabase(name)
+    const newPurchase = { name, quantity, total: quantity * price, price, images};
     setPurchases([...purchases, newPurchase]);
     setname('');
     setQuantity(1);
@@ -64,7 +69,8 @@ const FormTransaction: React.FC<TransactionProps> = ({ clientId }) => {
     return purchases.reduce((total, purchase) => total + purchase.total, 0).toFixed(2);
   };
   return (
-    <div className="max-w-md mx-auto mt-8 p-4 bg-white shadow-md rounded-md">
+    
+    <div className="max-w-md mx-auto mt-8 p-4 bg-white shadow-md rounded-md " >
       <h3 className="text-2xl font-semibold mb-4">Add Purchase</h3>
       <form onSubmit={(e) => e.preventDefault()}>
         <div className="mb-4">
@@ -99,11 +105,12 @@ const FormTransaction: React.FC<TransactionProps> = ({ clientId }) => {
         <ul>
           {purchases.map((purchase, index) => (
             <li key={index} className="flex justify-between items-center border-b py-2">
-              <div className="flex items-center">
-                <span className="mr-4">{purchase.name}</span>
+              <div>
+                <img src={purchase.images} className="w-80" alt="" />
               </div>
               <div className="flex items-center">
-                <span className="ml-4 flex ">Quantity: {purchase.quantity}</span>
+                <span className="mr-4 flex">Name: {purchase.name}</span>
+                <span className="mr-4 flex ">Quantity: {purchase.quantity}</span>
               </div>
               <div className="flex items-center">
                 <span className="mr-4 flex ">Total: ${purchase.total.toFixed(2)}</span>
