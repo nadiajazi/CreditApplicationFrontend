@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTransactionStore } from '../stores/useTransactionStore';
 import { useNavigate } from 'react-router-dom';
+import { fetchPriceFromDatabase } from '../services/FetchPriceFromDataBase';
 
 interface TransactionProps {
   clientId: number;
@@ -9,22 +10,12 @@ interface TransactionProps {
 const FormTransaction: React.FC<TransactionProps> = ({ clientId }) => {
   const [name, setname] = useState<string>("");
   const [quantity, setQuantity] = useState<number>(1);
+  const [total, setTotal] = useState<number>(0);
+  const [purchases, setPurchases] = useState<Array<any>>([]);
   const addPurchase = useTransactionStore((state) => state.addPurchase);
-  
+  const fetchAdminPurchases = useTransactionStore((state) => state.fetchAdminPurchases);
 
   const navigate = useNavigate();
-
-  const iduser = localStorage.getItem('id2');
-
-  const {
-    
-    adminPurchases,
-    fetchAdminPurchases,
-  } = useTransactionStore((state) => ({
-    
-    adminPurchases: state.adminPurchases?.filter((purchase) => purchase.userId === Number(iduser)) || [],
-    fetchAdminPurchases: state.fetchAdminPurchases,
-  }));
 
   useEffect(() => {
     fetchAdminPurchases();
@@ -38,29 +29,44 @@ const FormTransaction: React.FC<TransactionProps> = ({ clientId }) => {
     setQuantity(parseInt(e.target.value, 10));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const iduser = localStorage.getItem('id2');
-    console.log(iduser);
-    await addPurchase(name, quantity, Number(iduser));
-
+  const handleAddItem = async () => {
+    const price = await fetchPriceFromDatabase(name);
+    const newPurchase = { name, quantity, total: quantity * price, price };
+    setPurchases([...purchases, newPurchase]);
     setname('');
     setQuantity(1);
-    fetchAdminPurchases();
+    setTotal(0);
+  };
+
+  const handleDeleteItem = (index: number) => {
+    const updatedPurchases = [...purchases];
+    const deletedItem = updatedPurchases.splice(index, 1)[0];
+    setPurchases(updatedPurchases);
+    setTotal((prevTotal) => prevTotal - deletedItem.total);
+  };
+
+  const handleSavePurchases = async () => {
+    const iduser = localStorage.getItem('id2');
+    
+    for (const purchase of purchases) {
+      await addPurchase(purchase.name, purchase.quantity, Number(iduser));
+    }
+
+    await fetchAdminPurchases();
+    setPurchases([]);
+    navigate(`/admin/clients`);
   };
 
   const handleClose = () => {
     navigate(`/admin/clients`);
   };
-
-  const formatDate = (date: Date): string => {
-    return date.toISOString().slice(0, 16).replace('T', ' ');
+  const calculateTotalAmount = () => {
+    return purchases.reduce((total, purchase) => total + purchase.total, 0).toFixed(2);
   };
-
   return (
     <div className="max-w-md mx-auto mt-8 p-4 bg-white shadow-md rounded-md">
       <h3 className="text-2xl font-semibold mb-4">Add Purchase</h3>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={(e) => e.preventDefault()}>
         <div className="mb-4">
           <input
             className="border border-gray-300 p-2 w-full rounded-md"
@@ -82,7 +88,8 @@ const FormTransaction: React.FC<TransactionProps> = ({ clientId }) => {
         </div>
         <button
           className="bg-blue-500 text-white px-4 py-2 rounded-md"
-          type="submit"
+          type="button"
+          onClick={handleAddItem}
         >
           Add Item
         </button>
@@ -90,39 +97,52 @@ const FormTransaction: React.FC<TransactionProps> = ({ clientId }) => {
       <div className="mt-4">
         <h4 className="text-xl font-semibold">Purchase List</h4>
         <ul>
-          {adminPurchases?.map((transaction) => (
-            <li key={transaction.id} className="flex justify-between items-center border-b py-2">
-              <div>
-                <span>{transaction.purchaseName}</span>
-                <span className="ml-4">Quantity: {transaction.quantity}</span>
-                <span className="ml-4">Date: {formatDate(new Date(transaction.purchaseDate))}</span>
+          {purchases.map((purchase, index) => (
+            <li key={index} className="flex justify-between items-center border-b py-2">
+              <div className="flex items-center">
+                <span className="mr-4">{purchase.name}</span>
               </div>
-              <div>
-                <span>Amount: ${transaction.amount}</span>
+              <div className="flex items-center">
+                <span className="ml-4 flex ">Quantity: {purchase.quantity}</span>
+              </div>
+              <div className="flex items-center">
+                <span className="mr-4 flex ">Total: ${purchase.total.toFixed(2)}</span>
+                <span className="mr-4 flex ">Price: ${purchase.price.toFixed(2)}</span>
+                <button
+                  className="text-red-500"
+                  onClick={() => handleDeleteItem(index)}
+                >
+                  Delete
+                </button>
               </div>
             </li>
           ))}
         </ul>
         <div className="mt-4">
-          <h4 className="text-xl font-semibold">
-            Total Amount: ${adminPurchases ? adminPurchases.reduce((acc, curr) => acc + curr.amount, 0) : 0}
-          </h4>
+          <div className="flex justify-between items-center">
+            <div>
+              <h4 className="text-xl font-semibold">Total Amount:</h4>
+              <span className="text-lg">${calculateTotalAmount()}</span>
+            </div>
+            <div>
+              <button
+                className="bg-blue-500 text-white px-4 py-2 rounded-md mr-2"
+                onClick={handleSavePurchases}
+              >
+                Save Purchases
+              </button>
+              <button
+                className="bg-gray-300 text-gray-800 px-4 py-2 rounded-md"
+                onClick={handleClose}
+              >
+                Close
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
-      <div className="mt-6">
-        <button
-          className="bg-gray-300 text-gray-800 px-4 py-2 rounded-md"
-          onClick={handleClose}
-        >
-          Close
-        </button>
       </div>
     </div>
   );
 };
 
-
 export default FormTransaction;
-
-
-
