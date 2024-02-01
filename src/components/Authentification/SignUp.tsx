@@ -8,6 +8,9 @@ import Google from '../../assets/Google-removebg-preview.png'
 import 'react-toastify/dist/ReactToastify.css';
 import { FaUser } from "react-icons/fa";
 import { Link } from 'react-router-dom';
+interface SignUpProps {
+  history: any;
+}
 
 export default function SignUp() {
  
@@ -73,7 +76,7 @@ export default function SignUp() {
 
   const redirectUser = () => {
     return setTimeout(() => {
-      window.location.pathname = ('/login')
+      window.location.pathname = ('/emailVerification')
     }, 2000);
 
   }
@@ -116,8 +119,16 @@ export default function SignUp() {
           role: informations.role
 
         });
+        console.log(res)
+        localStorage.setItem('email', res.data.email);
 
+// Récupération de l'email de l'utilisateur depuis la réponse
+      const userEmail = res.data.email;
+      
+
+      // Redirection vers la page de vérification avec l'email comme paramètre
         toast.success("Success");
+
         return redirectUser();
       } catch (err) {
         console.log(err);
@@ -185,7 +196,7 @@ export default function SignUp() {
                 required
                 name="floating_first_name"
                 id="floating_first_name"
-                className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-black dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               />
               <label
                 htmlFor="floating_first_name"
@@ -206,7 +217,7 @@ export default function SignUp() {
                 id="floating_last_name"
                 placeholder=" "
                 required
-                className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-blackdark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               />
               <label
                 htmlFor="floating_last_name"
@@ -226,7 +237,7 @@ export default function SignUp() {
               onChange={(e) => handleChange2(e, "phone")}
               name="floating_phone"
               id="floating_phone"
-              className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+              className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-blackdark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               placeholder=" "
               required            />
               <label
@@ -246,7 +257,7 @@ export default function SignUp() {
               id="floating_email"
               value={informations.email ? informations.email : ""}
               onChange={(e) => handleChange(e, "email")}
-              className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+              className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-blackdark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               placeholder=" "
               required
               />
@@ -266,7 +277,7 @@ export default function SignUp() {
               type={showPassword ? "text" : "password"}
               name="floating_password"
               id="floating_password"
-              className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+              className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-blackdark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               placeholder=" "
               required
 
@@ -292,7 +303,7 @@ export default function SignUp() {
             <button 
               type="submit"
               onClick={handleClick}
-              className=" px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
+              className=" px-4 py-2 text-blackbg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
             >
               Create an account
             </button>

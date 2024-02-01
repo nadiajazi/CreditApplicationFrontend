@@ -22,6 +22,7 @@ const handleChange = (e:any, type:string) => {
 };
 
 
+
 const [showPassword, setShowPassword] = useState(false);
 
 const togglePasswordVisibility = () => {
@@ -126,7 +127,7 @@ const handleClick = () => {
                 type="email"
                 name="floating_email"
                 id="floating_email" 
-                className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-black dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 placeholder=" "
                 required
               />
@@ -146,7 +147,7 @@ const handleClick = () => {
                 type={showPassword ? "text" : "password"}
                 name="floating_password"
                 id="floating_password"
-                className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-black dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 placeholder=" "
                 required
               />
@@ -178,7 +179,7 @@ const handleClick = () => {
           <button 
             onClick={handleClick}
             type="submit"
-            className=" px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300">
+            className=" px-4 py-2 text-black bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300">
             Login
           </button>
 
