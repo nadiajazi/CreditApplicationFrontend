@@ -1,55 +1,51 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { NavbarWithMegaMenu } from './Layout/NavList';
+import { usePaymentStore } from '../stores/usePaymentStore';
 
-const PaymentPage = () => {
+const InvoicesPage: React.FC = () => {
+  const { clientInvoices, fetchClientInvoices } = usePaymentStore((state) => ({
+    clientInvoices: state.clientInvoices,
+    fetchClientInvoices: state.fetchClientInvoices,
+  }));
+
+  useEffect(() => {
+    fetchClientInvoices();
+  }, [fetchClientInvoices]);
+
+  const formatDate = (date: Date): string => {
+    return date.toISOString().slice(0, 16).replace('T', ' ');
+  };
+
   return (
     <div>
-      <NavbarWithMegaMenu></NavbarWithMegaMenu>
-      <div className='container px-40 py-40 mx-auto'>
-      <section className=" max-w-md mx-auto p-6 bg-white rounded-md shadow-md">
-        <h2 className="text-2xl font-semibold mb-6 text-orange">Payment Information</h2>
-
-        {/* Credit Card Number */}
-        <div className="mb-4">
-          <label className="block text-gray-600 text-sm font-semibold mb-2">Card Number</label>
-          <input
-            type="text"
-            className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
-            placeholder="**** **** **** ****"
-          />
+      <NavbarWithMegaMenu />
+      <div className="container px-40 py-40 mx-auto">
+        <h2 className='text-2xl font-bold mb-6'>Payment History: </h2>
+        <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+          <table className="w-full text-sm text-left rtl:text-right text-gray-700 dark:text-gray-400">
+            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+              <tr>
+                <th className='border border-gray-200 px-6 py-3 shadow-md '>ID</th>
+                <th className='border border-gray-200 px-6 py-3 shadow-md '>Amount</th>
+                <th className='border border-gray-200 px-6 py-3 shadow-md '>Method</th>
+                <th className='border border-gray-200 px-6 py-3 shadow-md '>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {clientInvoices?.map((payment) => (
+                <tr key={payment.id} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+                  <td className='border px-6 py-4 '>{payment.id}</td>
+                  <td className='border px-6 py-4 '>{payment.amount} TND</td>
+                  <td className='border px-6 py-4 '>{payment.paymentMethod}</td>
+                  <td className='border px-6 py-4 '>{formatDate(new Date(payment.createdDate))}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-
-        {/* Expiration Date */}
-        <div className="mb-4">
-          <label className="block text-gray-600 text-sm font-semibold mb-2">Expiration Date</label>
-          <input
-            type="text"
-            className="w-1/2 p-3 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
-            placeholder="MM/YY"
-          />
-        </div>
-
-        {/* CVV */}
-        <div className="mb-6">
-          <label className="block text-gray-600 text-sm font-semibold mb-2">CVV</label>
-          <input
-            type="text"
-            className="w-1/4 p-3 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
-            placeholder="***"
-          />
-        </div>
-
-        {/* Submit Button */}
-        <button
-          className="bg-skyblue text-white py-2 px-4 rounded-md hover:bg-green-600 focus:outline-none focus:shadow-outline-blue"
-          type="button"
-        >
-          Submit Payment
-        </button>
-      </section>
       </div>
-      </div>
+    </div>
   );
 };
 
-export default PaymentPage;
+export default InvoicesPage;

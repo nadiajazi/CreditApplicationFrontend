@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:8080"; // Replace with your Spring Boot backend URL
+const BASE_URL = "http://localhost:8060"; 
 
 export const getProductList = async (accessToken: string) => {
   try {

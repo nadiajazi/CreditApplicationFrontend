@@ -5,7 +5,7 @@ import LandingPage from '../landing/LandingPage';
 import Dachboard from "../client/Dachboard";
 import InvoicesPage from '../client/InvoicesPage';
 import PaymentPage from "../client/PaymentPage";
-import TransictionHistory from "../client/TransictionHistory";
+import TransictionHistory from "../client/TransactionHistory";
 import LoginPage from "../components/Authentification/LoginPage";
 import SignUp from "../components/Authentification/SignUp";
 import EmailVerification from '../components/Authentification/EmailVerification';
@@ -14,7 +14,7 @@ import AdminClientManagement from '../admin/AdminClientManagement';
 import ProductManagement from '../admin/ProductManagement';
 import TransactionManagement from '../admin/AdminTransaction';
 import FormTransaction from "../components/FormTransaction";
-import AddProducts from "../components/AddProducts";
+import InvoicesManagement from "../admin/InvoicesManagement";
 const AppRoutes: React.FC = () => {
     return (
       <Router>
@@ -31,6 +31,7 @@ const AppRoutes: React.FC = () => {
         <Route path="/admin/clients" element={<AdminClientManagement />} />
         <Route path="/admin/transaction" element={<TransactionManagement />} /> 
         <Route path="/admin/products" element={<ProductManagement />} />
+        <Route path="/admin/invoices" element={<InvoicesManagement />} />
         
         <Route
           path="/admin/clients/form"

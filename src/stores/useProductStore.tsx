@@ -19,6 +19,7 @@ interface Actions {
     removeProduct: (productId: number) => void;
     incrementQuantity: (productId: number) => void;
     decrementQuantity: (productId: number) => void;
+    addProduct: (name: string, price: number, images: string, ref: string, quantity:number) => void;
 }
 
 const INITIAL_STATE: State = {
@@ -35,7 +36,7 @@ export const useProductStore = create<State & Actions>((set) => ({
         set({ isLoading: true, error: null });
         const accessToken = localStorage.getItem("accessToken");
   
-        const response = await fetch("http://localhost:8080/Products", {
+        const response = await fetch("http://localhost:8060/Products", {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
@@ -48,7 +49,7 @@ export const useProductStore = create<State & Actions>((set) => ({
         const data = await response.json();
         console.log(data);
   
-        const totalProducts = data.length; // Assuming data is an array
+        const totalProducts = data.length; 
   
         set((state) => {
           const updatedState = { products: data, totalProducts, isLoading: false };
@@ -64,7 +65,7 @@ export const useProductStore = create<State & Actions>((set) => ({
       try {
         const accessToken = localStorage.getItem('accessToken');
         
-        const response = await fetch(`http://localhost:8080/Product/${productId}`, {
+        const response = await fetch(`http://localhost:8060/Product/${productId}`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
@@ -106,7 +107,35 @@ export const useProductStore = create<State & Actions>((set) => ({
         
       }));
   },
+  
+  addProduct: async (name: string, price: number, images: string, ref: string, quantity: number) => {
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      console.error('Authentication token not found in local storage');
+      return;
+    }
 
+    try {
+      const response = await fetch('http://localhost:8060/product', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ name, price, images, ref, quantity }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Error adding product');
+      }
+
+      
+      
+    } catch (error) {
+      console.error('Error adding product:', error);
+      throw error;
+    }
+  },
 
 
 

@@ -15,7 +15,7 @@ const EditMax: React.FC<EditMaxProps> = ({ onClose }) => {
         const accessToken = localStorage.getItem('accessToken');
         const userId = localStorage.getItem('id');
 
-        const response = await axios.get(`http://localhost:8080/api/v1/user/maxAmount/${userId}`, {
+        const response = await axios.get(`http://localhost:8060/api/v1/user/maxAmount/${userId}`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
@@ -41,7 +41,7 @@ const EditMax: React.FC<EditMaxProps> = ({ onClose }) => {
       const userId = localStorage.getItem('id');
 
       await axios.put(
-        `http://localhost:8080/api/v1/user/maxAmount/${userId}`,
+        `http://localhost:8060/api/v1/user/maxAmount/${userId}`,
         { maxAmount: newMaxAmount },
         {
           headers: {

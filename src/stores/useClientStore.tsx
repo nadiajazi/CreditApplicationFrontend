@@ -1,8 +1,5 @@
 import { create } from "zustand";
 
-export interface Address {
-  city: string;
-}
 
 export interface User {
   id: number;
@@ -12,11 +9,12 @@ export interface User {
   role: string;
   montant: number;
   maxAmount: number;
+  tel: string;
 
 }
 
 export interface Client extends User {
- 
+
 }
 
 interface State {
@@ -40,7 +38,7 @@ const INITIAL_STATE: State = {
   totalClients: 0,
   isLoading: false,
   error: null,
-  selectClient: () => { }, // Temporary placeholder, will be overwritten
+  selectClient: () => { }, 
 };
 
 
@@ -54,7 +52,7 @@ export const useClientStore = create<State & Actions>((set) => ({
     try {
       const accessToken = localStorage.getItem("accessToken");
   
-      const response = await fetch("http://localhost:8080/api/v1/management/users", {
+      const response = await fetch("http://localhost:8060/api/v1/management/users", {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -67,11 +65,11 @@ export const useClientStore = create<State & Actions>((set) => ({
       const data: User[] = await response.json();
       const clientsWithMontant: Client[] = data.map((user) => ({
         ...user,
-        montant: user.montant, // Set an initial value for montant
-        maxAmount: user.maxAmount,   // Set an initial value for maxAmount
+        montant: user.montant, 
+        maxAmount: user.maxAmount,   
       }));
   
-      set({ clients: clientsWithMontant, totalClients: clientsWithMontant.length, isLoading: false });
+      set({ clients: clientsWithMontant, totalClients: clientsWithMontant.length-2, isLoading: false });
     } catch (error) {
       console.error("Error fetching data:", error);
       set({ error, isLoading: false });
@@ -81,7 +79,7 @@ export const useClientStore = create<State & Actions>((set) => ({
   removeClient: async (clientId: number) => {
     try {
       const accessToken = localStorage.getItem('accessToken');
-      const response = await fetch(`http://localhost:8080/api/v1/management/user/${clientId}`, {
+      const response = await fetch(`http://localhost:8060/api/v1/management/user/${clientId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -94,7 +92,7 @@ export const useClientStore = create<State & Actions>((set) => ({
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
 
-      // If API request is successful, update the state
+    
       set((state) => ({
         clients: state.clients.filter((client) => client.id !== clientId),
         totalClients: state.totalClients - 1,

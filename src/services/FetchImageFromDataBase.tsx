@@ -1,4 +1,3 @@
-// FetchImageFromDatabase.tsx
 
 import { useProductStore } from '../stores/useProductStore';
 
@@ -10,7 +9,7 @@ export const fetchImageFromDatabase = async (productName: string): Promise<strin
     );
 
     if (matchingProduct) {
-      return matchingProduct.images || ''; // Assuming the image is a string (URL), adjust accordingly
+      return matchingProduct.images || '';
     } else {
       console.error(`Product with name "${productName}" not found in the database.`);
       return '';

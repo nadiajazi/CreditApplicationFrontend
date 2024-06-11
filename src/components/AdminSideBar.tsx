@@ -6,6 +6,7 @@ import { TbReportAnalytics } from "react-icons/tb";
 import { AiOutlineUser} from "react-icons/ai";
 import {  FiShoppingCart } from "react-icons/fi";
 import { Link } from "react-router-dom";
+import { FaMoneyBillTrendUp } from "react-icons/fa6";
 
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -17,7 +18,7 @@ interface MenuItem {
   icon: React.ElementType;
   margin?: boolean;
 
-  onClick?: () => void;  // Ajout de la propriété onClick
+  onClick?: () => void; 
 
 }
 
@@ -32,7 +33,7 @@ const AdminSideBar: React.FC<AdminSideBarProps> = ({ open, toggleSidebar }) => {
 
   const Logout = async () => {
     try {
-      await axios.post("http://localhost:8080/api/v1/auth/logout");
+      await axios.post("http://localhost:8060/api/v1/auth/logout");
       console.log("Déconnexion réussie !");
       // Vous pouvez ajouter d'autres actions de succès ici si nécessaire
     } catch (error) {
@@ -52,13 +53,14 @@ const AdminSideBar: React.FC<AdminSideBarProps> = ({ open, toggleSidebar }) => {
     { name: "Costumers", link: "/admin/clients", icon: AiOutlineUser },
     { name: "Products", link: "/admin/products", icon: RiShoppingBag3Fill },
     { name: "Transactions", link: "/admin/transaction", icon: FiShoppingCart },
+    { name: "Invoices", link: "/admin/invoices", icon: FaMoneyBillTrendUp },
     { name: "analytics", link: "/", icon: TbReportAnalytics, margin: true },
     { name: "Logout", link: "/login", icon: RiSettings4Line, onClick: handleClick },
 
   ];
 
   return (
-    <div className={`bg-[#82c0cc] min-h-screen ${open ? "w-72" : "w-16"} duration-500 text-gray-100 px-4`}>
+    <div className={`bg-[#5299D3] min-h-screen ${open ? "w-72" : "w-16"} duration-500 text-gray-100 px-4`}>
       <div className="py-3 flex justify-end">
         <HiMenuAlt3 size={26} className="cursor-pointer" onClick={toggleSidebar} />
       </div>

@@ -1,14 +1,16 @@
-import React, { useEffect } from 'react';
-import { useTransactionStore, Transaction } from '../stores/useTransactionStore';
-
+import React, { useEffect , useState} from 'react';
+import { useTransactionStore, PurchaseResponse} from '../stores/useTransactionStore';
 
 interface TransactionTableProps {
-  transactions: Transaction[];
+  transactions: PurchaseResponse[];
   label: string;
   options: { id: string; label: string; checked?: boolean }[];
 }
 
+
+
 const TransactionTable: React.FC<TransactionTableProps> = ({ label, options }) => {
+  const [searchDate, setSearchDate] = useState('');
   const {
     adminPurchases,
     fetchAdminPurchases,
@@ -21,47 +23,81 @@ const TransactionTable: React.FC<TransactionTableProps> = ({ label, options }) =
     fetchAdminPurchases();
   }, [fetchAdminPurchases]);
 
-
   const formatDate = (date: Date): string => {
     return date.toISOString().slice(0, 16).replace('T', ' ');
   };
+
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchDate(event.target.value);
+  };
+
+  const filteredTransactions = adminPurchases?.filter(transaction =>
+    transaction.createdDate.includes(searchDate)
+  );
+
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+      <div className="mb-4 flex items-center justify-between">
+        <input
+          type="date"
+          value={searchDate}
+          onChange={handleSearch}
+          className="p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+        />
+      </div>
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
           <tr>
             <th scope="col" className="px-6 py-3">
-              Name
+              ID
             </th>
-            <th scope="col" className="px-6 py-3">
-              Date
-            </th> 
             <th scope="col" className="px-6 py-3">
               Amount
             </th>
             <th scope="col" className="px-6 py-3">
-              Quantity
+              Email
+            </th>
+            <th scope="col" className="px-6 py-3">
+              Phone
+            </th>
+            <th scope="col" className="px-6 py-3">
+              Creation Date
+            </th>
+            <th scope="col" className="px-6 py-3">
+              Products
             </th>
           </tr>
         </thead>
         <tbody>
-          {adminPurchases?.map((transaction) => (
+        {filteredTransactions?.map((transaction) => (
             <tr
               key={transaction.id}
               className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
             >
               <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
-                {transaction.purchaseName}
+                {transaction.id}
               </td>
               <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
-              {formatDate(new Date(transaction.purchaseDate))}
-              </td> 
-              <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
-                ${transaction.amount}
+                {transaction.amount} TND
               </td>
               <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
-                {transaction.quantity}
+                {transaction.userResponse?.name} 
               </td>
+              <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                {transaction.userResponse?.phone} 
+              </td>
+              <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                {formatDate(new Date(transaction.createdDate))}
+              </td>
+              <td className="px-6 py-4 font-semibold text-gray-900">
+                  <ul>
+                    {transaction.products.map((product) => (
+                      <li key={product.name}>
+                        {product.name}
+                      </li>
+                    ))}
+                  </ul>
+                </td>
             </tr>
           ))}
         </tbody>

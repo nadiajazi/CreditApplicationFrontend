@@ -6,38 +6,33 @@ import axios from "axios";
 
 
 
-//Element Menu
+
 const navListMenuItems = [
   {
     title: "Payment",
-    description: "Find the perfect solution for your needs.",
+    description: "Pay you bills here.",
     icon: CreditCardIcon,
     toPath: "/client/dashboard/payment",
   },
   {
     title: "Invoices",
-    description: "Meet and learn about our dedication",
+    description: "Check the history of your invoices.",
     icon: ClipboardDocumentIcon,
     toPath: "/client/dashboard/invoices",
   },
   {
     title: "History",
-    description: "Find the perfect solution for your needs.",
+    description: "Find here the history of you purchases.",
     icon: DocumentMagnifyingGlassIcon,
     toPath: "/client/dashboard/history",
   },
 ];
 
-//Render menu item when hover
+
 function NavListMenu() {
 
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
-
-
-
-  
-
 
   const renderItems = navListMenuItems.map(
     ({ icon, title, description, toPath }, key) => (
@@ -152,12 +147,10 @@ export function NavbarWithMegaMenu() {
   const navigate = useNavigate();
   const Logout = async()=>{
     try {
-      await axios.post("http://localhost:8080/api/v1/auth/logout");
+      await axios.post("http://localhost:8060/api/v1/auth/logout");
       console.log("Déconnexion réussie !");
-      // Vous pouvez ajouter d'autres actions de succès ici si nécessaire
     } catch (error) {
       console.error("Erreur lors de la déconnexion :", error);
-      // Vous pouvez gérer l'erreur ici, par exemple afficher un message à l'utilisateur
     }
   };
   const handleClick=()=>{
@@ -171,7 +164,7 @@ export function NavbarWithMegaMenu() {
         <div className="flex items-center justify-between text-gray-100">
           <Typography
             as="a"
-            href="#"
+            href="/client/dashboard"
             variant="h6"
             className="mr-4 cursor-pointer py-1.5 lg:ml-2"
           >

@@ -74,10 +74,10 @@ interface ProductTableProps {
     />
   </div>
 
-  {/* Add Product Button */}
+ 
   <div className="col-span-2 sm:col-span-1">
     <button
-      className="bg-[#82c0cc] text-white p-2 rounded-md w-full"
+      className="bg-[#5299D3] text-white p-2 rounded-md w-full"
       onClick={() => onAddClick()}
     >
       Add Product
@@ -153,10 +153,10 @@ interface ProductTableProps {
                     </div>
                   </td>
                   <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
-                    ${product.price}
+                    {product.price} TND
                   </td>
                   <td className="px-6 py-4 flex-direction-column">
-  <div className="flex">
+    <div className="flex">
     {/* Delete Button */}
     <button
       className="text-red-500 hover:text-red-700 flex items-center mr-2"
@@ -164,21 +164,17 @@ interface ProductTableProps {
     >
       <FaTrash />
     </button>
-
-    {/* Edit Button */}
     <button onClick={() => onEditClick(product.id)}>
-      
-        <FaEdit />
-   
+      <FaEdit />
     </button>
   </div>
-</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      );
-      };
+  </td>
+</tr>
+))}
+</tbody>
+</table>
+</div>
+);
+};
     
-    export default ProductTable;
+export default ProductTable;
