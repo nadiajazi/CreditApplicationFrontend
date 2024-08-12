@@ -33,12 +33,10 @@ const AdminSideBar: React.FC<AdminSideBarProps> = ({ open, toggleSidebar }) => {
 
   const Logout = async () => {
     try {
-      await axios.post("http://localhost:8060/api/v1/auth/logout");
+      await axios.post("http://core:8060/api/v1/auth/logout");
       console.log("Déconnexion réussie !");
-      // Vous pouvez ajouter d'autres actions de succès ici si nécessaire
     } catch (error) {
       console.error("Erreur lors de la déconnexion :", error);
-      // Vous pouvez gérer l'erreur ici, par exemple afficher un message à l'utilisateur
     }
   };
 

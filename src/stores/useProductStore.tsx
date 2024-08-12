@@ -36,7 +36,7 @@ export const useProductStore = create<State & Actions>((set) => ({
         set({ isLoading: true, error: null });
         const accessToken = localStorage.getItem("accessToken");
   
-        const response = await fetch("http://localhost:8060/Products", {
+        const response = await fetch("http://core:8060/Products", {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
@@ -65,7 +65,7 @@ export const useProductStore = create<State & Actions>((set) => ({
       try {
         const accessToken = localStorage.getItem('accessToken');
         
-        const response = await fetch(`http://localhost:8060/Product/${productId}`, {
+        const response = await fetch(`http://core:8060/Product/${productId}`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
@@ -82,7 +82,6 @@ export const useProductStore = create<State & Actions>((set) => ({
           return { ...state, products: updatedProducts };
         });
       } catch (error) {
-        // Gérer les erreurs, par exemple, afficher un message à l'utilisateur ou journaliser l'erreur.
         console.error('Erreur lors de la suppression du produit:', error);
       }
     }
@@ -116,7 +115,7 @@ export const useProductStore = create<State & Actions>((set) => ({
     }
 
     try {
-      const response = await fetch('http://localhost:8060/product', {
+      const response = await fetch('http://core:8060/product', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

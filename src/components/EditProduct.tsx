@@ -46,7 +46,7 @@ const EditProduct: React.FC<EditProductProps> = ({ onClose, id}) => {
   const refreshTokens = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:8060//api/v1/auth/refresh-token",
+        "http://core:8060//api/v1/auth/refresh-token",
         { refreshToken },
         {
           headers: {},
@@ -67,7 +67,7 @@ const EditProduct: React.FC<EditProductProps> = ({ onClose, id}) => {
       try {
         const storedAccessToken = localStorage.getItem("accessToken");
         const result = await axios.get(
-          `http://localhost:8060/Product/${id}`,
+          `http://core:8060/Product/${id}`,
           {
             headers: {
               Authorization: `Bearer ${storedAccessToken}`,
@@ -98,7 +98,7 @@ const EditProduct: React.FC<EditProductProps> = ({ onClose, id}) => {
     e.preventDefault();
     try {
       const response = await axios.put(
-        `http://localhost:8060/Product/${id}`,
+        `http://core:8060/Product/${id}`,
         productData,
         {
           headers: {

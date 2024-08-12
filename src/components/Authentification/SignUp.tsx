@@ -107,7 +107,7 @@ export default function SignUp() {
     } else {
       // Proceed with server request
       try {
-        const res = await axios.post("http://localhost:8060/api/v1/auth/register", {
+        const res = await axios.post("http://core:8060/api/v1/auth/register", {
           firstName: informations.firstname,
           lastName: informations.lastname,
           password: informations.password,

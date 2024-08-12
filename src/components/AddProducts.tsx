@@ -41,7 +41,7 @@ const AddProducts: React.FC<AddProductProps> = ({ onClose }) => {
         },
       };
 
-      await axios.post("http://localhost:8060/product", productData, config);
+      await axios.post("http://core:8060/product", productData, config);
 
       fetchData();
 

@@ -65,7 +65,7 @@ export const useTransactionStore = create<TransactionStore>((set, get) => {
       }
 
       try {
-        const response = await fetch('http://localhost:8060/api/purchases/admin/allpurchases', {
+        const response = await fetch('http://core:8060/api/purchases/admin/allpurchases', {
           headers: {
             'Authorization': `Bearer ${token}`,
           },
@@ -92,7 +92,7 @@ export const useTransactionStore = create<TransactionStore>((set, get) => {
       }
 
       try {
-        const response = await fetch(`http://localhost:8060/api/purchases/client/${userId}`, {
+        const response = await fetch(`http://core:8060/api/purchases/client/${userId}`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           },
@@ -101,7 +101,7 @@ export const useTransactionStore = create<TransactionStore>((set, get) => {
         set({ clientPurchases: data });
       } catch (error) {
         console.error('Error fetching client purchases:', error);
-        throw error; // Ensure the error is thrown so it can be caught in the component
+        throw error; 
       }
     },
 
@@ -113,7 +113,7 @@ export const useTransactionStore = create<TransactionStore>((set, get) => {
       }
 
       try {
-        const response = await fetch('http://localhost:8060/api/purchases/admin', { 
+        const response = await fetch('http://core:8060/api/purchases/admin', { 
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -127,7 +127,7 @@ export const useTransactionStore = create<TransactionStore>((set, get) => {
         }
       } catch (error) {
         console.error('Error adding purchase:', error);
-        throw error; // Ensure the error is thrown so it can be caught in the component
+        throw error; 
       }
     },
   };

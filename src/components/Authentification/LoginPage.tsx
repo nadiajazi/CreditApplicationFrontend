@@ -63,7 +63,7 @@ const redirectUser =(role: any)=>{
     errors.forEach((error) => toast.error(error));
   } else {
     try {
-      const response = await axios.post("http://localhost:8060/api/v1/auth/authenticate", {
+      const response = await axios.post("http://core:8060/api/v1/auth/authenticate", {
         password: informations.password,
         email: informations.email
       });

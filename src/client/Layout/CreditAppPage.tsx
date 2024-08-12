@@ -23,7 +23,7 @@ const CreditAppPage: React.FC = () => {
         const accessToken = localStorage.getItem('accessToken');
         const userId = localStorage.getItem('id');
 
-        const response = await axios.get(`http://localhost:8060/api/v1/user/maxAmount/${userId}`, {
+        const response = await axios.get(`http://core:8060/api/v1/user/maxAmount/${userId}`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
@@ -43,7 +43,7 @@ const CreditAppPage: React.FC = () => {
         const accessToken = localStorage.getItem('accessToken');
         const userId = localStorage.getItem('id');
 
-        const response = await axios.get(`http://localhost:8060/api/v1/user/montant/${userId}`, {
+        const response = await axios.get(`http://core:8060/api/v1/user/montant/${userId}`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },

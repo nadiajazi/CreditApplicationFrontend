@@ -32,7 +32,7 @@ export const usePaymentStore = create<PaymentStore>((set) => {
       }
 
       try {
-        const response = await fetch('http://localhost:8090/api/v1/payment/user', {
+        const response = await fetch('http://payment:8090/api/v1/payment/user', {
           headers: {
             'Authorization': `Bearer ${token}`,
           },
@@ -58,7 +58,7 @@ export const usePaymentStore = create<PaymentStore>((set) => {
         }
   
         try {
-          const response = await fetch('http://localhost:8090/api/v1/payment/admin', {
+          const response = await fetch('http://payment:8090/api/v1/payment/admin', {
             headers: {
               'Authorization': `Bearer ${token}`,
             },
