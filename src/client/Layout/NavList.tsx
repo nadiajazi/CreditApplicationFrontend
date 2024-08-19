@@ -147,7 +147,7 @@ export function NavbarWithMegaMenu() {
   const navigate = useNavigate();
   const Logout = async()=>{
     try {
-      await axios.post("http://core:8060/api/v1/auth/logout");
+      await axios.post(`/api/v1/auth/logout`);
       console.log("Déconnexion réussie !");
     } catch (error) {
       console.error("Erreur lors de la déconnexion :", error);

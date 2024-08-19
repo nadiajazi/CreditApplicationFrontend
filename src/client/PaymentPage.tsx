@@ -50,7 +50,7 @@ const PaymentPage: React.FC = () => {
 
     try {
       const response = await axios.post(
-        'http://payment:8090/api/v1/payment/makepayment',
+        "/api/v1/payment/makepayment",
         paymentRequest,
         {
           headers: {

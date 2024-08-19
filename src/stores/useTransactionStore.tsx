@@ -65,7 +65,7 @@ export const useTransactionStore = create<TransactionStore>((set, get) => {
       }
 
       try {
-        const response = await fetch('http://core:8060/api/purchases/admin/allpurchases', {
+        const response = await fetch("/api/purchases/admin/allpurchases", {
           headers: {
             'Authorization': `Bearer ${token}`,
           },
@@ -92,7 +92,7 @@ export const useTransactionStore = create<TransactionStore>((set, get) => {
       }
 
       try {
-        const response = await fetch(`http://core:8060/api/purchases/client/${userId}`, {
+        const response = await fetch(`/api/purchases/client/${userId}`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           },
@@ -113,7 +113,7 @@ export const useTransactionStore = create<TransactionStore>((set, get) => {
       }
 
       try {
-        const response = await fetch('http://core:8060/api/purchases/admin', { 
+        const response = await fetch("/api/purchases/admin", { 
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

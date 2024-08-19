@@ -1,141 +1,141 @@
-import {create } from "zustand";
+import { create } from "zustand";
 
 export interface Product {
-    id: number
-    name: string
-    price: number
-    images: string
-    quantity: number
-    purchaseDate: Date;
-   }
-interface State {
-    products: Product [],
-    totalProducts: number;
-    isLoading : boolean,
-    error: any ,
+  id: number;
+  name: string;
+  price: number;
+  images: string;
+  quantity: number;
+  purchaseDate: Date;
 }
+
+interface State {
+  products: Product[];
+  totalProducts: number;
+  isLoading: boolean;
+  error: any;
+}
+
 interface Actions {
-    fetchData : () => Promise<void>
-    removeProduct: (productId: number) => void;
-    incrementQuantity: (productId: number) => void;
-    decrementQuantity: (productId: number) => void;
-    addProduct: (name: string, price: number, images: string, ref: string, quantity:number) => void;
+  fetchData: () => Promise<void>;
+  removeProduct: (productId: number) => void;
+  incrementQuantity: (productId: number) => void;
+  decrementQuantity: (productId: number) => void;
+  addProduct: (
+    name: string,
+    price: number,
+    images: string,
+    ref: string,
+    quantity: number
+  ) => void;
 }
 
 const INITIAL_STATE: State = {
-    products: [],
-    totalProducts: 0,
-    isLoading: false,
-    error: null,
-}
+  products: [],
+  totalProducts: 0,
+  isLoading: false,
+  error: null,
+};
 
 export const useProductStore = create<State & Actions>((set) => ({
-    ...INITIAL_STATE,
-    fetchData: async () => {
-      try {
-        set({ isLoading: true, error: null });
-        const accessToken = localStorage.getItem("accessToken");
-  
-        const response = await fetch("http://core:8060/Products", {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
-  
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-  
-        const data = await response.json();
-        console.log(data);
-  
-        const totalProducts = data.length; 
-  
-        set((state) => {
-          const updatedState = { products: data, totalProducts, isLoading: false };
-          localStorage.setItem('productData', JSON.stringify(updatedState));
-          return updatedState;
-        });
-      } catch (error) {
-        set({ error, isLoading: false });
-      }
-    },
+  ...INITIAL_STATE,
 
-    removeProduct: async (productId) => {
-      try {
-        const accessToken = localStorage.getItem('accessToken');
-        
-        const response = await fetch(`http://core:8060/Product/${productId}`, {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
-    
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-    
-        set((state) => {
-          const updatedProducts = state.products.filter((item) => item.id !== productId);
-          return { ...state, products: updatedProducts };
-        });
-      } catch (error) {
-        console.error('Erreur lors de la suppression du produit:', error);
+  fetchData: async () => {
+    try {
+      set({ isLoading: true, error: null });
+      const accessToken = localStorage.getItem("accessToken");
+
+      const response = await fetch("/Products", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
       }
+
+      const data = await response.json();
+      const totalProducts = data.length;
+
+      set((state) => {
+        const updatedState = { products: data, totalProducts, isLoading: false };
+        localStorage.setItem("productData", JSON.stringify(updatedState));
+        return updatedState;
+      });
+    } catch (error) {
+      set({ error, isLoading: false });
     }
-,    
-    incrementQuantity: (productId: number) =>
+  },
+
+  removeProduct: async (productId) => {
+    try {
+      const accessToken = localStorage.getItem("accessToken");
+
+      const response = await fetch(`/Product/${productId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      set((state) => ({
+        products: state.products.filter((item) => item.id !== productId),
+      }));
+    } catch (error) {
+      console.error("Error deleting product:", error);
+    }
+  },
+
+  incrementQuantity: (productId: number) => {
     set((state) => ({
       products: state.products.map((product) =>
         product.id === productId
-          ? { ...product, quantity: (product.quantity || 0) + 1 }
+          ? { ...product, quantity: product.quantity + 1 }
           : product
       ),
-    })),
-
-    decrementQuantity: (productId:number) => {
-        set((state) => ({
-           products : state.products.map((product) =>
-          product.id === productId && (product.quantity || 0) > 0
-            ? { ...product, quantity: (product.quantity || 0) - 1 }
-            : product
-        ),
-  
-        
-      }));
+    }));
   },
-  
-  addProduct: async (name: string, price: number, images: string, ref: string, quantity: number) => {
-    const token = localStorage.getItem('accessToken');
-    if (!token) {
-      console.error('Authentication token not found in local storage');
-      return;
-    }
 
+  decrementQuantity: (productId: number) => {
+    set((state) => ({
+      products: state.products.map((product) =>
+        product.id === productId
+          ? { ...product, quantity: Math.max(0, product.quantity - 1) }
+          : product
+      ),
+    }));
+  },
+
+  addProduct: async (name, price, images, ref, quantity) => {
     try {
-      const response = await fetch('http://core:8060/product', {
-        method: 'POST',
+      const accessToken = localStorage.getItem("accessToken");
+
+      const response = await fetch("/Product", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify({ name, price, images, ref, quantity }),
       });
 
       if (!response.ok) {
-        throw new Error('Error adding product');
+        throw new Error(`HTTP error! Status: ${response.status}`);
       }
 
-      
-      
+      const product = await response.json();
+
+      set((state) => ({
+        products: [...state.products, product],
+      }));
     } catch (error) {
-      console.error('Error adding product:', error);
-      throw error;
+      console.error("Error adding product:", error);
     }
   },
-
-
-
 }));

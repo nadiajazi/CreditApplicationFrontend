@@ -1,10 +1,9 @@
 import axios from "axios";
 
-const BASE_URL = "http://core:8060"; 
 
 export const getProductList = async (accessToken: string) => {
   try {
-    const response = await axios.get(`${BASE_URL}/products`, {
+    const response = await axios.get("/products", {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -18,7 +17,7 @@ export const getProductList = async (accessToken: string) => {
 
 export const getProduct = async (id: number, accessToken: string) => {
   try {
-    const response = await axios.get(`${BASE_URL}/products/${id}`, {
+    const response = await axios.get(`/products/${id}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -32,7 +31,7 @@ export const getProduct = async (id: number, accessToken: string) => {
 
 export const addProductAPI = async (data: any, accessToken: string) => {
   try {
-    await axios.post(`${BASE_URL}/products`, data, {
+    await axios.post("/products", data, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -45,7 +44,7 @@ export const addProductAPI = async (data: any, accessToken: string) => {
 
 export const updateProductAPI = async (id: number, data: any, accessToken: string) => {
   try {
-    await axios.put(`${BASE_URL}/products/${id}`, data, {
+    await axios.put(`/products/${id}`, data, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -58,7 +57,7 @@ export const updateProductAPI = async (id: number, data: any, accessToken: strin
 
 export const deleteProductAPI = async (id: number, accessToken: string) => {
   try {
-    await axios.delete(`${BASE_URL}/products/${id}`, {
+    await axios.delete(`/products/${id}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },

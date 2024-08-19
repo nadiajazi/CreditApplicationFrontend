@@ -47,7 +47,7 @@ const redirectUser =(role: any)=>{
   if (field === null || field === "") {
     return `Please fill in the ${fieldName} field`;
   }
-  return null; // No error
+  return null; 
 };
 
  const sendToServer = async () => {
@@ -63,7 +63,7 @@ const redirectUser =(role: any)=>{
     errors.forEach((error) => toast.error(error));
   } else {
     try {
-      const response = await axios.post("http://core:8060/api/v1/auth/authenticate", {
+      const response = await axios.post("/api/v1/auth/authenticate", {
         password: informations.password,
         email: informations.email
       });
@@ -71,7 +71,6 @@ const redirectUser =(role: any)=>{
       const { data } = response;
 
       console.log(data);
-
       localStorage.setItem('accessToken', data.accessToken);
       localStorage.setItem('refreshToken', data.refreshToken);
       localStorage.setItem('firstname', data.firstName);
@@ -100,7 +99,7 @@ const handleClick = () => {
 
     
     <div className="flex items-center justify-center h-screen" > 
-      <ToastContainer /> {/* the ToastContainer at the top level */}
+      <ToastContainer /> 
       
       {/* Image of the login page*/}
       <div className="flex flex-col items-center h-full bg-white " >

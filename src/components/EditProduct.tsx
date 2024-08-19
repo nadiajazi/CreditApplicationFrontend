@@ -4,16 +4,15 @@ import { useParams } from "react-router-dom";
 import { useProductStore } from "../stores/useProductStore";
 
 interface EditProductProps {
-  onClose: () => void; 
+  onClose: () => void;
   id?: number;
-
 }
 
-const EditProduct: React.FC<EditProductProps> = ({ onClose, id}) => {
-    const { productId } = useParams();
-    const [accessToken, setAccessToken] = useState<string>("");
-    const [refreshToken, setRefreshToken] = useState<string>("");
-    const {  fetchData } = useProductStore()
+const EditProduct: React.FC<EditProductProps> = ({ onClose, id }) => {
+  const { productId } = useParams();
+  const [accessToken, setAccessToken] = useState<string>("");
+  const [refreshToken, setRefreshToken] = useState<string>("");
+  const { fetchData } = useProductStore();
 
   useEffect(() => {
     fetchData();
@@ -29,7 +28,7 @@ const EditProduct: React.FC<EditProductProps> = ({ onClose, id}) => {
 
   const { name, quantity, price, ref, images } = productData;
 
-  const onInputChange = (e:any) => {
+  const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setProductData({ ...productData, [e.target.name]: e.target.value });
   };
 
@@ -46,18 +45,19 @@ const EditProduct: React.FC<EditProductProps> = ({ onClose, id}) => {
   const refreshTokens = async () => {
     try {
       const response = await axios.post(
-        "http://core:8060//api/v1/auth/refresh-token",
+        "/api/v1/auth/refresh-token",
         { refreshToken },
         {
-          headers: {},
+          headers: {
+            'Content-Type': 'application/json',
+          },
         }
       );
 
       const newAccessToken = response.data.accessToken;
       setAccessToken(newAccessToken);
-
       localStorage.setItem("accessToken", newAccessToken);
-    } catch (error:any) {
+    } catch (error: any) {
       console.error("Error refreshing tokens:", error.message);
     }
   };
@@ -67,7 +67,7 @@ const EditProduct: React.FC<EditProductProps> = ({ onClose, id}) => {
       try {
         const storedAccessToken = localStorage.getItem("accessToken");
         const result = await axios.get(
-          `http://core:8060/Product/${id}`,
+          `/Product/${id}`,
           {
             headers: {
               Authorization: `Bearer ${storedAccessToken}`,
@@ -75,7 +75,7 @@ const EditProduct: React.FC<EditProductProps> = ({ onClose, id}) => {
           }
         );
         setProductData(result.data);
-      } catch (error:any) {
+      } catch (error: any) {
         if (error.response && error.response.status === 401) {
           console.error("Token expired, refreshing tokens...");
           await refreshTokens();
@@ -85,20 +85,21 @@ const EditProduct: React.FC<EditProductProps> = ({ onClose, id}) => {
         }
       }
     };
+
     if (id) {
       loadProduct();
     }
-  }, [id]);
+  }, [id, accessToken]);
 
   const handleCancel = () => {
     onClose();
   };
 
-  const onSubmit = async (e:any) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       const response = await axios.put(
-        `http://core:8060/Product/${id}`,
+        `/Product/${id}`,
         productData,
         {
           headers: {
@@ -114,12 +115,12 @@ const EditProduct: React.FC<EditProductProps> = ({ onClose, id}) => {
 
       onClose();
       fetchData();
-    } catch (error:any) {
+    } catch (error: any) {
       console.error("Error submitting product:", error.message);
     }
   };
 
-  const handleOutsideClick = (e:any) => {
+  const handleOutsideClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
       onClose();
     }
@@ -133,7 +134,7 @@ const EditProduct: React.FC<EditProductProps> = ({ onClose, id}) => {
       <div className="bg-white p-6 border rounded-md max-w-2xl w-full h-full shadow overflow-y-auto">
         <h2 className="text-center m-4 text-2xl font-bold">Edit Product</h2>
 
-        <form onSubmit={(e) => onSubmit(e)}>
+        <form onSubmit={onSubmit}>
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-600">
               Image URL
@@ -224,6 +225,7 @@ const EditProduct: React.FC<EditProductProps> = ({ onClose, id}) => {
               Submit
             </button>
             <button
+              type="button"
               className="bg-red-500 text-white p-2 rounded-md"
               onClick={handleCancel}
             >

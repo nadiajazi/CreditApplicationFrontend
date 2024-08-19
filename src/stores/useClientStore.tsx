@@ -52,7 +52,7 @@ export const useClientStore = create<State & Actions>((set) => ({
     try {
       const accessToken = localStorage.getItem("accessToken");
   
-      const response = await fetch("http://core:8060/api/v1/management/users", {
+      const response = await fetch("/api/v1/management/users", {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -79,7 +79,7 @@ export const useClientStore = create<State & Actions>((set) => ({
   removeClient: async (clientId: number) => {
     try {
       const accessToken = localStorage.getItem('accessToken');
-      const response = await fetch(`http://core:8060/api/v1/management/user/${clientId}`, {
+      const response = await fetch(`/api/v1/management/user/${clientId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
