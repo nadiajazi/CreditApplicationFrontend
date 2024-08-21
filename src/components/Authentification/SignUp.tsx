@@ -41,27 +41,23 @@ export default function SignUp() {
   const handleChange2 = (e: any, type: string) => {
     const inputValue = e.target.value;
 
-    // Regular expression to match numeric digits
     const numericOnlyRegex = /^[0-9]*$/;
 
     if (numericOnlyRegex.test(inputValue) && inputValue.length <= 8) {
-      // If the input is a digit and total digits are 8 or less, update the state
       setInformations((prev) => {
         return { ...prev, [type]: inputValue };
       });
 
       if (inputValue.length === 8) {
-        // If exactly 8 digits are entered, you can perform additional actions here if needed
       }
     } else {
-      // If the input is not a digit or more than 8 digits, display a toast message
       toast.error("Please enter up to 8 digits for the phone number");
     }
   };
 
 
 
-  // Check the password validation
+
 
 
   const handleChange = (e: any, type: string) => {
@@ -81,7 +77,7 @@ export default function SignUp() {
     if (field === null || field === "") {
       return `Please fill in the ${fieldName} field`;
     }
-    return null; // No error
+    return null; 
   };
 
   const sendToServer = async () => {
