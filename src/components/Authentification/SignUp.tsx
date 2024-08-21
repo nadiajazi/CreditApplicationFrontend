@@ -292,7 +292,6 @@ export default function SignUp() {
           </div>
         </div>
 
-            {/* signup with google */}
           <div className="flex items-center mt-2 mb-2 justify-center space-x-4">
             <hr className="flex-grow border-t border-gray-300" />
               <span className="text-gray-500">Or</span>
