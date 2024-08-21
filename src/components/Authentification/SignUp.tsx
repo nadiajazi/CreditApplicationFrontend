@@ -156,15 +156,12 @@ export default function SignUp() {
         
         <div className="static p-8 max-h-screen items-center justify-start bg-blue-100 ">
           <div className="max-w-md mx-auto">
-            {/* header of the signup form */}
             <div className="w-full flex flex-col mb-2" >
               <h2 className="text-2xl font-bold text-center mb-2">Welcome|Sign Up</h2>
               <p className="text-left">Let's ensure you have everything in order to proceed with your credit application and initiate the setup for your first credit account!</p>
             </div>
 
-          {/* firstname & lastname */}
           <div className="grid md:grid-cols-2 md:gap-6">
-          {/* firstname */}
             <div className="relative z-0 w-full mb-5 group">
               <span className="absolute right-0 top-3 text-1xl"><FaUser /></span>
               <input
@@ -185,7 +182,6 @@ export default function SignUp() {
               </label>
             </div>
 
-          {/*LastName */}
             <div className="relative z-0 w-full mb-5 group">
               <span className="absolute right-0 top-3 text-1xl"><FaUser /></span>
               <input
@@ -207,7 +203,7 @@ export default function SignUp() {
           </div>
         </div>
 
-          {/* phonenumber */}
+          
           <div className="relative z-0 w-full mb-5 group">
             <span className="absolute right-1 top-3 text-1xl"><FaPhoneAlt /> </span>
             <input
