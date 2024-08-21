@@ -26,10 +26,8 @@ export default function SignUp() {
   const handleChange1 = (e: any, type: string) => {
     const inputValue = e.target.value;
 
-    // Regular expression to match only letters (no numbers or symbols)
     const lettersOnlyRegex = /^[a-zA-Z]+$/;
 
-    // Check if the input value contains only letters
     if (lettersOnlyRegex.test(inputValue) || inputValue === "") {
       setInformations((prev) => {
         return { ...prev, [type]: inputValue };
@@ -83,25 +81,21 @@ export default function SignUp() {
   const sendToServer = async () => {
     const errors: string[] = [];
 
-    // Validate each field
     const firstnameError = validateField(informations.firstname, "First Name");
     const lastnameError = validateField(informations.lastname, "Last Name");
     const emailError = validateField(informations.email, "Email");
     const passwordError = validateField(informations.password, "Password");
     const phoneError = validateField(informations.phone, "Phone Number");
 
-    // Collect errors
     if (firstnameError) errors.push(firstnameError);
     if (lastnameError) errors.push(lastnameError);
     if (emailError) errors.push(emailError);
     if (passwordError) errors.push(passwordError);
     if (phoneError) errors.push(phoneError);
 
-    // Display errors in toast messages
     if (errors.length > 0) {
       errors.forEach((error) => toast.error(error));
     } else {
-      // Proceed with server request
       try {
         const res = await axios.post("/api/v1/auth/register", {
           firstName: informations.firstname,
