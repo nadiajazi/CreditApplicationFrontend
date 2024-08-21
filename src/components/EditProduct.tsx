@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
 import { useProductStore } from "../stores/useProductStore";
 
 interface EditProductProps {
@@ -9,7 +8,6 @@ interface EditProductProps {
 }
 
 const EditProduct: React.FC<EditProductProps> = ({ onClose, id }) => {
-  const { productId } = useParams();
   const [accessToken, setAccessToken] = useState<string>("");
   const [refreshToken, setRefreshToken] = useState<string>("");
   const { fetchData } = useProductStore();
