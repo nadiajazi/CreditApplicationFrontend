@@ -223,7 +223,7 @@ export default function SignUp() {
               </label>
           </div>
 
-          {/* email */}
+  
           <div className="relative z-0 w-full mb-5 group">
             <span className="absolute right-0 top-2 text-2xl"><HiOutlineMail /></span>
             <input
@@ -244,7 +244,7 @@ export default function SignUp() {
             </label>
           </div>
 
-          {/* password */}
+    
           <div className="relative z-0 w-full mb-5 group">
             <input
               value={informations.password ? informations.password : ""}
@@ -273,7 +273,7 @@ export default function SignUp() {
           </div>
 
           <div className="grid md:grid-cols-2 md:gap-6">
-           {/* signupButton */}
+           
 
             <button 
               type="submit"
@@ -282,7 +282,7 @@ export default function SignUp() {
             >
               Create an account
             </button>
-              {/* back to page login */}
+        
               <div className="text-center mt-2">
                 <span className="text-gray-600 text-sm">Already have an account?</span>
                   <Link to="/login" className="text-blue-600 hover:text-blue-700 text-sm font-semibold">
