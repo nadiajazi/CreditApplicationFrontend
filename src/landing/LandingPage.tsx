@@ -7,7 +7,7 @@ const LandingPage: React.FC = () => {
   const navigate = useNavigate();
 
   const handleGetStartedClick = () => {
-
+    //redirect to login
     navigate('/login');
 
 
