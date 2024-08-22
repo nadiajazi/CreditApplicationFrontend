@@ -46,7 +46,7 @@ export const useClientStore = create<State & Actions>((set) => ({
 
   ...INITIAL_STATE,
   selectClient: (client) => set({ selectedClient: client }),
-  
+  //adding a test comment
   fetchData: async () => {
     set({ isLoading: true, error: null });
     try {
