@@ -29,7 +29,7 @@ interface Actions {
     quantity: number
   ) => void;
 }
-
+//adding a test comment
 const INITIAL_STATE: State = {
   products: [],
   totalProducts: 0,
