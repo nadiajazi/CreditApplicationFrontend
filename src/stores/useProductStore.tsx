@@ -8,7 +8,7 @@ export interface Product {
   quantity: number;
   purchaseDate: Date;
 }
-
+//adding a test comment
 interface State {
   products: Product[];
   totalProducts: number;
